@@ -1,0 +1,325 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>France Biopharma Job Studio</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">France biopharma job studio</p>
+        <h1>Find sharper-fit roles and prepare stronger applications.</h1>
+      </div>
+      <div class="top-actions">
+        <button id="saveAll" class="primary">Save workspace</button>
+        <button id="resetDemo" class="ghost">Restore starter profile</button>
+      </div>
+    </header>
+
+    <main class="layout">
+      <aside class="side-panel">
+        <section>
+          <h2>Your target</h2>
+          <label>
+            Preferred job titles
+            <textarea id="targetRoles" rows="5"></textarea>
+          </label>
+          <label>
+            French locations
+            <input id="locations" type="text">
+          </label>
+          <label>
+            Contract and language preferences
+            <input id="preferences" type="text">
+          </label>
+        </section>
+
+        <section>
+          <h2>Application tracker</h2>
+          <div class="tracker-form">
+            <input id="trackerCompany" type="text" placeholder="Company">
+            <input id="trackerRole" type="text" placeholder="Role">
+            <select id="trackerStage">
+              <option>To apply</option>
+              <option>Applied</option>
+              <option>Interview</option>
+              <option>Follow-up</option>
+              <option>Closed</option>
+            </select>
+            <button id="addTracker" class="secondary">Add</button>
+          </div>
+          <div id="trackerList" class="tracker-list"></div>
+        </section>
+      </aside>
+
+      <section class="workspace">
+        <nav class="tabs" aria-label="Workspace sections">
+          <button class="tab active" data-tab="daily">Jobs today</button>
+          <button class="tab" data-tab="worldwide">Worldwide fit</button>
+          <button class="tab" data-tab="profile">Profile</button>
+          <button class="tab" data-tab="jd">Job fit</button>
+          <button class="tab" data-tab="documents">CV & letter</button>
+          <button class="tab" data-tab="tracker">Tracker</button>
+          <button class="tab" data-tab="search">Search plan</button>
+        </nav>
+
+        <section id="profile" class="panel">
+          <div class="panel-heading">
+            <div>
+              <p class="eyebrow">Candidate profile</p>
+              <h2>Keep the evidence ready before you apply.</h2>
+            </div>
+          </div>
+          <div class="two-column">
+            <label>
+              Core experience
+              <textarea id="coreExperience" rows="9"></textarea>
+            </label>
+            <label>
+              Technical skills and tools
+              <textarea id="skills" rows="9"></textarea>
+            </label>
+            <label>
+              Achievements with numbers
+              <textarea id="achievements" rows="8"></textarea>
+            </label>
+            <label>
+              CMC / project management examples
+              <textarea id="pmExperience" rows="8"></textarea>
+            </label>
+            <label class="full">
+              Paste your full CV here
+              <textarea id="sourceCv" rows="12" placeholder="Paste your current CV text here. The tailored CV and motivation letter will use this as the source."></textarea>
+            </label>
+            <label class="full">
+              Relevant experience to emphasize
+              <textarea id="relevantExperience" rows="8" placeholder="Add the strongest experience you want every tailored application to use: injectable mAb formulation, process development, stability, CMC coordination, analytical collaboration, project tracking..."></textarea>
+            </label>
+          </div>
+        </section>
+
+        <section id="daily" class="panel active">
+          <div class="panel-heading">
+            <div>
+              <p class="eyebrow">Daily job finder</p>
+              <h2>Recommended jobs for fit, salary, and future growth.</h2>
+            </div>
+            <div class="button-row">
+              <button id="buildDailySearches" class="primary">Refresh searches</button>
+              <button id="openPrioritySearch" class="secondary">Open top search</button>
+            </div>
+          </div>
+          <article class="suggestion-panel">
+            <div class="suggestion-heading">
+              <div>
+                <h3>Today's suggested jobs</h3>
+                <p id="suggestionMeta">Curated for your background and next-step potential.</p>
+              </div>
+              <button id="copyJobSummary" class="secondary">Copy shortlist</button>
+            </div>
+            <div id="jobSuggestions" class="job-suggestions"></div>
+          </article>
+          <article class="application-source">
+            <h3>Application source</h3>
+            <div class="source-grid">
+              <label>
+                Upload old CV
+                <input id="cvUpload" type="file" accept=".txt,.md,.rtf,.csv,.pdf,.doc,.docx">
+              </label>
+              <label>
+                Relevant experience to emphasize
+                <textarea id="quickRelevantExperience" rows="5" placeholder="Write once here, then click Prepare application on any job."></textarea>
+              </label>
+            </div>
+            <p class="helper-text" id="cvUploadStatus">Upload a text-based CV when possible. PDF/DOCX extraction is best-effort in this local browser version.</p>
+          </article>
+          <div class="daily-grid">
+            <label>
+              Must-have keywords
+              <textarea id="mustHaveKeywords" rows="5"></textarea>
+            </label>
+            <label>
+              Nice-to-have keywords
+              <textarea id="niceKeywords" rows="5"></textarea>
+            </label>
+            <label>
+              Exclude keywords
+              <textarea id="excludeKeywords" rows="5"></textarea>
+            </label>
+          </div>
+          <div class="results-grid daily-results">
+            <article>
+              <h3>Priority searches</h3>
+              <div id="dailySearchLinks" class="link-list"></div>
+            </article>
+            <article>
+              <h3>Match score checklist</h3>
+              <ul id="scoreChecklist"></ul>
+            </article>
+            <article>
+              <h3>Companies to watch</h3>
+              <div id="companyWatchlist" class="chips"></div>
+            </article>
+          </div>
+        </section>
+
+        <section id="worldwide" class="panel">
+          <div class="panel-heading">
+            <div>
+              <p class="eyebrow">Worldwide opportunities</p>
+              <h2>Very good fit roles outside France.</h2>
+            </div>
+            <button id="copyWorldwideSummary" class="secondary">Copy global shortlist</button>
+          </div>
+          <article class="suggestion-panel">
+            <div class="suggestion-heading">
+              <div>
+                <h3>Global high-fit jobs</h3>
+                <p id="worldwideMeta">Kept separate from the France list.</p>
+              </div>
+            </div>
+            <div id="worldwideSuggestions" class="job-suggestions"></div>
+          </article>
+          <div class="results-grid daily-results">
+            <article>
+              <h3>Best global search themes</h3>
+              <div id="worldwideSearchStrings" class="chips"></div>
+            </article>
+            <article>
+              <h3>Check before applying</h3>
+              <ul>
+                <li>Work authorization, visa sponsorship, and relocation support.</li>
+                <li>Language expectations, especially German-speaking or local-language roles.</li>
+                <li>Whether remote means truly worldwide, Europe-only, or country-specific.</li>
+                <li>Salary range and whether it compensates for relocation cost.</li>
+              </ul>
+            </article>
+            <article>
+              <h3>Best future paths</h3>
+              <ul>
+                <li>CMC technical project management for higher salary and broader scope.</li>
+                <li>MSAT and tech transfer for development-to-manufacturing growth.</li>
+                <li>Regulatory CMC for long-term strategic roles.</li>
+                <li>Biologics drug product development for strongest immediate fit.</li>
+              </ul>
+            </article>
+          </div>
+        </section>
+
+        <section id="jd" class="panel">
+          <div class="panel-heading">
+            <div>
+              <p class="eyebrow">Job description analyzer</p>
+              <h2>Paste a JD and see what to emphasize.</h2>
+            </div>
+            <button id="analyzeJd" class="primary">Analyze JD</button>
+          </div>
+          <label>
+            Job description
+            <textarea id="jobDescription" rows="13" placeholder="Paste the job description here..."></textarea>
+          </label>
+          <div class="results-grid">
+            <article>
+              <h3>Strong matches</h3>
+              <ul id="strongMatches"></ul>
+            </article>
+            <article>
+              <h3>Missing or weak signals</h3>
+              <ul id="gaps"></ul>
+            </article>
+            <article>
+              <h3>Keywords to mirror</h3>
+              <div id="keywords" class="chips"></div>
+            </article>
+          </div>
+        </section>
+
+        <section id="documents" class="panel">
+          <div class="panel-heading">
+            <div>
+              <p class="eyebrow">Tailored application</p>
+              <h2>Draft a focused CV profile and motivation letter.</h2>
+            </div>
+            <div class="button-row">
+              <button id="generateDocs" class="primary">Generate drafts</button>
+              <button id="copyDocs" class="secondary">Copy all</button>
+            </div>
+          </div>
+          <div class="document-grid">
+            <label>
+              Company
+              <input id="companyName" type="text" placeholder="Company name">
+            </label>
+            <label>
+              Role title
+              <input id="roleTitle" type="text" placeholder="Role title">
+            </label>
+            <label class="full">
+              Selected job notes
+              <textarea id="selectedJobNotes" rows="8" placeholder="Click Prepare application on a job card, or paste the job notes here."></textarea>
+            </label>
+            <label class="full">
+              Tailored CV profile
+              <textarea id="cvDraft" rows="12"></textarea>
+            </label>
+            <label class="full">
+              Motivation letter
+              <textarea id="letterDraft" rows="18"></textarea>
+            </label>
+          </div>
+        </section>
+
+        <section id="tracker" class="panel">
+          <div class="panel-heading">
+            <div>
+              <p class="eyebrow">Application board</p>
+              <h2>Track jobs, email exchanges, and follow-ups.</h2>
+            </div>
+          </div>
+          <div id="trackerBoard" class="tracker-board"></div>
+        </section>
+
+        <section id="search" class="panel">
+          <div class="panel-heading">
+            <div>
+              <p class="eyebrow">Seven-month search reset</p>
+              <h2>Use a weekly rhythm that creates more conversations.</h2>
+            </div>
+          </div>
+          <div class="search-grid">
+            <article>
+              <h3>Best-fit role families</h3>
+              <ul>
+                <li>Formulation Scientist, Biologics / Injectable Drug Product</li>
+                <li>Process Development Scientist, mAb / Sterile Manufacturing</li>
+                <li>Drug Product Development Scientist</li>
+                <li>CMC Associate Project Manager or CMC Coordinator</li>
+                <li>MSAT / Tech Transfer Scientist for biologics fill-finish</li>
+              </ul>
+            </article>
+            <article>
+              <h3>Weekly cadence</h3>
+              <ul>
+                <li>Apply to 4 to 6 high-fit roles with tailored documents.</li>
+                <li>Contact 8 to 12 hiring managers, CMC leads, or recruiters.</li>
+                <li>Ask for 2 short informational calls per week.</li>
+                <li>Review replies every Friday and adjust your role keywords.</li>
+              </ul>
+            </article>
+            <article>
+              <h3>Search strings</h3>
+              <div id="searchStrings"></div>
+            </article>
+          </div>
+        </section>
+      </section>
+    </main>
+
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+    <script src="daily-jobs.js"></script>
+    <script src="worldwide-jobs.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>

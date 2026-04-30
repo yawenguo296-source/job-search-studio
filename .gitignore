@@ -1,0 +1,36 @@
+# Local/system files
+.DS_Store
+Thumbs.db
+
+# Heavy dependency folders: this project should stay dependency-free
+node_modules/
+dist/
+build/
+.cache/
+.parcel-cache/
+.vite/
+
+# Secrets and local configuration
+.env
+.env.*
+*.key
+*.pem
+*.p12
+*.mobileprovision
+
+# Personal documents that should not be pushed by accident
+cv/
+cvs/
+resume/
+resumes/
+private/
+uploads/
+*.pdf
+*.doc
+*.docx
+*.rtf
+
+# Logs and temporary files
+*.log
+tmp/
+temp/
