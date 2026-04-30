@@ -832,8 +832,9 @@ function getFitNote(score = 0) {
 function prepareApplication(job) {
   $("companyName").value = job.company;
   $("roleTitle").value = job.title;
-  $("formattedCvTitle").value = suggestCvTitle(job);
-  $("cvLanguage").value = shouldUseFrenchApplication(`${job.location || ""} ${job.company || ""} ${job.title || ""}`) ? "fr" : "en";
+  const useFrench = shouldUseFrenchApplication(`${job.location || ""} ${job.company || ""} ${job.title || ""}`);
+  $("cvLanguage").value = useFrench ? "fr" : "en";
+  $("formattedCvTitle").value = suggestCvTitle(job, useFrench);
   $("selectedJobNotes").value = [
     `${job.title} - ${job.company}`,
     `Location: ${job.location}`,
@@ -855,13 +856,31 @@ function prepareApplication(job) {
   showToast("Application drafts prepared");
 }
 
-function suggestCvTitle(job) {
+function suggestCvTitle(job, isFrench = true) {
   const title = (job.title || "").toLowerCase();
-  if (title.includes("cmc") || title.includes("project")) return "CMC Project Manager | Drug Product Biologics | CDMO Coordination";
-  if (title.includes("msat") || title.includes("tech transfer")) return "Drug Product / MSAT Scientist | Biologics | Tech Transfer";
-  if (title.includes("regulatory")) return "Regulatory CMC Associate | Injectable Biologics | Drug Product";
-  if (title.includes("proposal")) return "Technical Proposal Writer | CDMO | Biologics Drug Product";
-  return "Pharmaceutical Development Scientist | Sterile Injectable Biologics";
+  if (title.includes("cmc") || title.includes("project")) {
+    return isFrench
+      ? "Chargée de Développement Pharmaceutique CMC | Drug Product Biologiques | Coordination CDMO"
+      : "CMC Project Manager | Drug Product Biologics | CDMO Coordination";
+  }
+  if (title.includes("msat") || title.includes("tech transfer")) {
+    return isFrench
+      ? "Chargée de Développement Pharmaceutique - MSAT / Tech Transfer | Biologiques injectables"
+      : "Drug Product / MSAT Scientist | Biologics | Tech Transfer";
+  }
+  if (title.includes("regulatory")) {
+    return isFrench
+      ? "Chargée CMC Réglementaire | Biologiques injectables | Drug Product"
+      : "Regulatory CMC Associate | Injectable Biologics | Drug Product";
+  }
+  if (title.includes("proposal")) {
+    return isFrench
+      ? "Proposal Writer CDMO | Biologics Drug Product | Rédaction technique"
+      : "Technical Proposal Writer | CDMO | Biologics Drug Product";
+  }
+  return isFrench
+    ? "Chargée de Développement Pharmaceutique | Produits injectables stériles | Biologiques"
+    : "Pharmaceutical Development Scientist | Sterile Injectable Biologics";
 }
 
 function copyJobSummary() {
@@ -913,123 +932,29 @@ function buildCvProfile() {
   ].filter(Boolean).join("\n");
   const combined = `${source}\n${relevant}`;
   const language = $("cvLanguage").value || "fr";
-  const selectedTitle = $("formattedCvTitle").value.trim() || $("roleTitle").value.trim();
   const isFrench = language === "fr";
+  const job = getSelectedJobContext();
+  const roleType = detectRoleType(`${job.title} ${job.fit} ${job.angles} ${job.concern}`);
   const email = (combined.match(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/i) || [""])[0];
   const phone = (combined.match(/(\+33\s?\d(?:[\s.-]?\d{2}){4}|0\d(?:[\s.-]?\d{2}){4})/) || [""])[0];
+  const titles = getCvTitles(roleType, isFrench);
 
   return {
     name: "Yawen GUO",
-    title: selectedTitle || (isFrench
-      ? "Chargée de Développement Pharmaceutique CMC - Drug Product"
-      : "CMC Pharmaceutical Development Scientist - Drug Product"),
+    title: $("formattedCvTitle").value.trim() || titles.title,
+    subtitle: titles.subtitle,
+    target: job.title ? `${job.title}${job.company ? ` - ${job.company}` : ""}` : "",
     location: "Lyon, France",
     email,
     phone,
+    driving: isFrench ? "Permis B" : "Driving licence B",
     languages: isFrench
       ? ["Chinois : langue maternelle", "Français : bilingue", "Anglais : bilingue"]
       : ["Chinese: native", "French: bilingual", "English: bilingual"],
-    summary: isFrench
-      ? [
-          "Scientifique en développement pharmaceutique spécialisée dans les produits injectables stériles et biologiques.",
-          "Expérience en formulation, procédés, lyophilisation, QbD/DoE, documentation CMC et coordination transverse en environnement CDMO et Big Pharma.",
-          "Profil à l'interface entre Drug Product, MSAT/tech transfer, CMC project management et partenaires CDMO/CRO."
-        ]
-      : [
-          "Pharmaceutical development scientist specialized in sterile injectable and biologics drug products.",
-          "Experience in formulation, process development, lyophilization, QbD/DoE, CMC documentation and cross-functional coordination in CDMO and Big Pharma environments.",
-          "Profile positioned between Drug Product development, MSAT/tech transfer, CMC project management and CDMO/CRO coordination."
-        ],
-    skills: isFrench
-      ? [
-          "Développement pharmaceutique - injectables stériles, biologiques, Drug Product",
-          "Formulation liquide et lyophilisée, stabilité, compatibilité, troubleshooting",
-          "Procédés : mixing, filtration, remplissage aseptique, lyophilisation, scale-up",
-          "QbD / ICH Q8 : QTPP, CQA, CPP, CMA, design space",
-          "DoE, JMP, Minitab, R, Python, visualisation et outils IA",
-          "Analytique : HPLC, DLS, DSC, NanoDSF, CE-SDS, TFF, MFI",
-          "CMC : protocoles, SOP, rapports, CTD Module 3, IMP, change controls",
-          "Coordination QC, MSAT, production, analytique, qualité, CDMO/CRO"
-        ]
-      : [
-          "Pharmaceutical development - sterile injectables, biologics, Drug Product",
-          "Liquid and lyophilized formulation, stability, compatibility, troubleshooting",
-          "Processes: mixing, filtration, aseptic filling, lyophilization, scale-up",
-          "QbD / ICH Q8: QTPP, CQA, CPP, CMA, design space",
-          "DoE, JMP, Minitab, R, Python, data visualization and AI-based tools",
-          "Analytics: HPLC, DLS, DSC, NanoDSF, CE-SDS, TFF, MFI",
-          "CMC: protocols, SOPs, reports, CTD Module 3, IMP, change controls",
-          "Coordination with QC, MSAT, production, analytical, quality, CDMO/CRO"
-        ],
-    experience: isFrench
-      ? [
-          {
-            role: "CMC Project Manager",
-            company: "Aurobac - Lyon, France",
-            dates: "Juin 2025 - Septembre 2025",
-            bullets: [
-              "Pilotage des activités CMC pour un programme de peptides antimicrobiens, incluant des formulations liposomales.",
-              "Coordination et suivi de partenaires externes CDMO/CRO pour les activités de formulation et développement analytique.",
-              "Gestion des activités liées aux IMP cliniques, au reconditionnement, à l'approvisionnement et à la conformité réglementaire.",
-              "Suivi des budgets, devis, change controls et contribution à la stratégie de développement pharmaceutique."
-            ]
-          },
-          {
-            role: "Chargée de Développement Pharmaceutique - Biologics / Drug Product",
-            company: "Catalent CDMO - Limoges, France",
-            dates: "Juillet 2022 - Juin 2025",
-            bullets: [
-              "Développement de formulations injectables liquides et lyophilisées jusqu'à la production GMP pour 6 molécules First-in-Human.",
-              "Coordination d'environ 18 projets de formulation/CMC avec les équipes QC, MSAT, production, analytique, qualité et PM.",
-              "Conception et réalisation d'études de formulation et procédés : mixing, filtration, remplissage aseptique, lyophilisation, compatibilité et troubleshooting.",
-              "Rédaction de protocoles, SOP, rapports, labbooks, méthodes analytiques, templates et éléments de documentation CMC.",
-              "Support à l'industrialisation, au scale-up, au transfert de technologie et aux interactions clients en français et anglais."
-            ]
-          },
-          {
-            role: "Stage de fin d'études - Développement de formulation",
-            company: "Sanofi Pasteur - Marcy-l'Etoile, France",
-            dates: "Mars 2021 - Août 2021",
-            bullets: [
-              "Planification et réalisation d'études de formulation et procédés pour vaccins, avec approche QbD/ICH Q8.",
-              "Application de DoE pour l'optimisation expérimentale, analyse de stabilité et visualisation de données pour soutenir les décisions."
-            ]
-          }
-        ]
-      : [
-          {
-            role: "CMC Project Manager",
-            company: "Aurobac - Lyon, France",
-            dates: "June 2025 - September 2025",
-            bullets: [
-              "Led CMC activities for an antimicrobial peptide development program, including innovative liposomal formulations.",
-              "Coordinated external CDMO/CRO partners for formulation and analytical development activities.",
-              "Managed clinical IMP-related activities, repackaging, supply and regulatory/quality compliance follow-up.",
-              "Tracked budgets, quotes, change controls and contributed to pharmaceutical development strategy."
-            ]
-          },
-          {
-            role: "Pharmaceutical Development Scientist - Biologics / Drug Product",
-            company: "Catalent CDMO - Limoges, France",
-            dates: "July 2022 - June 2025",
-            bullets: [
-              "Developed liquid and lyophilized injectable formulations up to GMP production for 6 First-in-Human molecules.",
-              "Coordinated around 18 formulation/CMC projects with QC, MSAT, production, analytical, quality and PM teams.",
-              "Designed and executed formulation/process studies: mixing, filtration, aseptic filling, lyophilization, compatibility and troubleshooting.",
-              "Wrote protocols, SOPs, reports, labbooks, analytical methods, templates and CMC documentation inputs.",
-              "Supported industrialization, scale-up, technology transfer and client interactions in French and English."
-            ]
-          },
-          {
-            role: "Final Internship - Formulation Development",
-            company: "Sanofi Pasteur - Marcy-l'Etoile, France",
-            dates: "March 2021 - August 2021",
-            bullets: [
-              "Planned and performed vaccine formulation/process development studies with a QbD/ICH Q8 approach.",
-              "Applied DoE for experimental optimization, stability analysis and data visualization to support formulation decisions."
-            ]
-          }
-        ],
+    summary: getTargetedSummary(roleType, isFrench, job),
+    fitHighlights: getFitHighlights(roleType, isFrench, job),
+    skills: getTargetedSkills(roleType, isFrench),
+    experience: getTargetedExperience(roleType, isFrench),
     education: isFrench
       ? ["Master en Biotechnologie et Ingénierie des Biomolécules - ENSTBB, France, 2019-2021", "Licence en Biologie - Henan Agricultural University, Chine, 2015-2019", "Certification ICH E6 (R2) - Good Clinical Practice"]
       : ["MSc Biotechnology and Biomolecule Engineering - ENSTBB, France, 2019-2021", "BSc Biology - Henan Agricultural University, China, 2015-2019", "ICH E6 (R2) Good Clinical Practice certification"],
@@ -1040,22 +965,286 @@ function buildCvProfile() {
   };
 }
 
+function getSelectedJobContext() {
+  const notes = $("selectedJobNotes").value || "";
+  const lines = notes.split("\n");
+  const first = lines[0] || "";
+  const split = first.split(" - ");
+  return {
+    title: $("roleTitle").value.trim() || split[0] || "",
+    company: $("companyName").value.trim() || split.slice(1).join(" - ") || "",
+    location: getNoteValue(lines, "Location"),
+    priority: getNoteValue(lines, "Priority"),
+    fitScore: getNoteValue(lines, "Fit score"),
+    salary: getNoteValue(lines, "Salary"),
+    fit: getNoteValue(lines, "Fit"),
+    concern: getNoteValue(lines, "Concern"),
+    angles: getNoteValue(lines, "Angles")
+  };
+}
+
+function getNoteValue(lines, key) {
+  const line = lines.find((item) => item.toLowerCase().startsWith(`${key.toLowerCase()}:`));
+  return line ? line.slice(key.length + 1).trim() : "";
+}
+
+function detectRoleType(text) {
+  const value = text.toLowerCase();
+  if (value.includes("proposal") || value.includes("writer") || value.includes("client")) return "proposal";
+  if (value.includes("regulatory") || value.includes("impa") || value.includes("ctd")) return "regulatory";
+  if (value.includes("msat") || value.includes("tech transfer") || value.includes("technology transfer") || value.includes("industrial")) return "msat";
+  if (value.includes("cmc") || value.includes("project") || value.includes("pmo")) return "cmc";
+  return "formulation";
+}
+
+function getCvTitles(type, isFrench) {
+  const map = {
+    cmc: isFrench
+      ? ["Chargée de Développement Pharmaceutique CMC", "Drug Product | Biologiques injectables | CDMO & coordination transverse"]
+      : ["CMC Pharmaceutical Development Scientist", "Drug Product | Injectable biologics | CDMO & cross-functional coordination"],
+    msat: isFrench
+      ? ["Chargée de Développement Pharmaceutique - MSAT / Tech Transfer", "Injectables stériles | Industrialisation | Scale-up"]
+      : ["Drug Product / MSAT Scientist", "Sterile injectables | Industrialization | Scale-up"],
+    regulatory: isFrench
+      ? ["Chargée de Développement Pharmaceutique CMC - Réglementaire", "Drug Product | Documentation CMC | IMP / CTD Module 3"]
+      : ["Regulatory CMC Associate - Drug Product", "Injectable biologics | CMC documentation | IMP / CTD Module 3"],
+    proposal: isFrench
+      ? ["Proposal Writer CDMO - Biologics Drug Product", "Rédaction technique | CMC | Coordination client et équipes scientifiques"]
+      : ["Technical Proposal Writer - CDMO Biologics", "Technical writing | CMC | Client and scientific team coordination"],
+    formulation: isFrench
+      ? ["Chargée de Développement Pharmaceutique - Produits injectables", "Formulation & procédés | QbD / DoE | Biologiques"]
+      : ["Pharmaceutical Development Scientist - Injectable Products", "Formulation & process | QbD / DoE | Biologics"]
+  };
+  const [title, subtitle] = map[type] || map.formulation;
+  return { title, subtitle };
+}
+
+function getTargetedSummary(type, isFrench, job) {
+  const targetLine = job.title
+    ? (isFrench
+      ? `Candidature ciblée pour ${job.title}${job.company ? ` chez ${job.company}` : ""} : mise en avant des expériences les plus proches du besoin du poste.`
+      : `Targeted application for ${job.title}${job.company ? ` at ${job.company}` : ""}: strongest matching experience is prioritized.`)
+    : "";
+  const baseFr = {
+    cmc: [
+      "Chargée de développement pharmaceutique avec une expérience Drug Product en CDMO et une première expérience de pilotage CMC.",
+      "Habituée à coordonner des interfaces formulation, analytique, qualité, production, MSAT et partenaires CDMO/CRO.",
+      "Profil adapté aux rôles CMC où il faut comprendre la technique, structurer les informations et suivre les décisions jusqu'à l'exécution."
+    ],
+    msat: [
+      "Scientifique Drug Product spécialisée en injectables stériles, avec une expérience concrète en formulation, procédés, lyophilisation et support au scale-up.",
+      "Expérience à l'interface développement, production, QC/MSAT et industrialisation, avec rédaction de documents techniques et troubleshooting.",
+      "Profil pertinent pour des rôles MSAT ou tech transfer demandant une bonne compréhension du développement produit et des contraintes de fabrication."
+    ],
+    regulatory: [
+      "Profil CMC Drug Product avec expérience en documentation scientifique, protocoles, rapports, SOP et contribution à des éléments réglementaires.",
+      "Compréhension des produits injectables stériles, IMP, change controls, qualité et coordination de partenaires externes.",
+      "Positionnement pertinent pour évoluer vers des fonctions Regulatory CMC associate/specialist à partir d'une base technique solide."
+    ],
+    proposal: [
+      "Profil CDMO Biologics combinant développement Drug Product, rédaction technique et coordination transverse.",
+      "Expérience dans la structuration d'informations scientifiques complexes pour protocoles, rapports, templates et contenus techniques.",
+      "Capacité à faire le lien entre besoins clients, faisabilité technique, ressources et équipes formulation, analytique, production et qualité."
+    ],
+    formulation: [
+      "Scientifique en développement pharmaceutique spécialisée dans les produits injectables stériles et biologiques.",
+      "Expérience en formulation liquide et lyophilisée, procédés, stabilité, QbD/DoE, documentation et troubleshooting.",
+      "Profil adapté aux rôles de développement Drug Product nécessitant autonomie expérimentale, rigueur documentaire et coordination transverse."
+    ]
+  };
+  const baseEn = {
+    cmc: [
+      "Pharmaceutical development scientist with Drug Product CDMO experience and first CMC project management exposure.",
+      "Used to coordinating formulation, analytical, quality, production, MSAT and CDMO/CRO interfaces.",
+      "Relevant for CMC roles requiring technical understanding, structured information and action follow-up."
+    ],
+    msat: [
+      "Drug Product scientist specialized in sterile injectables, with hands-on experience in formulation, process development, lyophilization and scale-up support.",
+      "Experience at the interface of development, production, QC/MSAT and industrialization, including technical writing and troubleshooting.",
+      "Relevant for MSAT or tech transfer roles requiring strong product/process understanding."
+    ],
+    regulatory: [
+      "Drug Product CMC profile with experience in scientific documentation, protocols, reports, SOPs and regulatory documentation inputs.",
+      "Understanding of sterile injectables, IMP, change controls, quality and external partner coordination.",
+      "Relevant for Regulatory CMC associate/specialist roles built on a strong technical foundation."
+    ],
+    proposal: [
+      "CDMO Biologics profile combining Drug Product development, technical writing and cross-functional coordination.",
+      "Experience structuring complex scientific information for protocols, reports, templates and technical content.",
+      "Able to connect client needs, technical feasibility, resources and formulation, analytical, production and quality teams."
+    ],
+    formulation: [
+      "Pharmaceutical development scientist specialized in sterile injectable and biologics drug products.",
+      "Experience in liquid and lyophilized formulation, process development, stability, QbD/DoE, documentation and troubleshooting.",
+      "Relevant for Drug Product development roles requiring experimental autonomy, documentation rigor and cross-functional coordination."
+    ]
+  };
+  return [targetLine, ...(isFrench ? baseFr[type] : baseEn[type])].filter(Boolean);
+}
+
+function getFitHighlights(type, isFrench, job) {
+  const roleSpecific = {
+    cmc: isFrench
+      ? ["Coordination de 18 projets formulation/CMC en environnement CDMO", "Suivi de partenaires CDMO/CRO, devis, budgets et change controls", "Vision Drug Product utile pour challenger les décisions CMC"]
+      : ["Coordinated 18 formulation/CMC projects in a CDMO environment", "Followed CDMO/CRO partners, quotes, budgets and change controls", "Drug Product background to challenge CMC decisions"],
+    msat: isFrench
+      ? ["Support industrialisation, scale-up et transfert de technologie", "Procédés injectables : mixing, filtration, remplissage aseptique, lyophilisation", "Troubleshooting et interface développement-production"]
+      : ["Industrialization, scale-up and technology transfer support", "Injectable processes: mixing, filtration, aseptic filling, lyophilization", "Troubleshooting and development-production interface"],
+    regulatory: isFrench
+      ? ["Documentation CMC : protocoles, SOP, rapports, CTD Module 3", "Expérience IMP, conformité réglementaire et qualité", "Compréhension technique des produits injectables biologiques"]
+      : ["CMC documentation: protocols, SOPs, reports, CTD Module 3", "IMP, regulatory compliance and quality exposure", "Technical understanding of injectable biologics"],
+    proposal: isFrench
+      ? ["Rédaction et structuration d'informations techniques complexes", "Interaction clients et équipes internes en français/anglais", "Compréhension CDMO des besoins, ressources et faisabilité"]
+      : ["Writing and structuring complex technical information", "Client and internal team interactions in French/English", "CDMO understanding of needs, resources and feasibility"],
+    formulation: isFrench
+      ? ["6 molécules First-in-Human accompagnées jusqu'à la production GMP", "Formulation liquide et lyophilisée de produits injectables", "QbD/DoE, stabilité, compatibilité et troubleshooting"]
+      : ["6 First-in-Human molecules supported up to GMP production", "Liquid and lyophilized formulation of injectable products", "QbD/DoE, stability, compatibility and troubleshooting"]
+  };
+  const fromJob = job.angles ? job.angles.split(";").map((item) => item.trim()).filter(Boolean).slice(0, 2) : [];
+  return [...fromJob, ...(roleSpecific[type] || roleSpecific.formulation)].slice(0, 5);
+}
+
+function getTargetedSkills(type, isFrench) {
+  const commonFr = [
+    "Injectables stériles, biologiques, Drug Product",
+    "QbD / ICH Q8 : QTPP, CQA, CPP, CMA, design space",
+    "DoE, JMP, Minitab, R, Python, visualisation et outils IA",
+    "Analytique : HPLC, DLS, DSC, NanoDSF, CE-SDS, TFF, MFI"
+  ];
+  const commonEn = [
+    "Sterile injectables, biologics, Drug Product",
+    "QbD / ICH Q8: QTPP, CQA, CPP, CMA, design space",
+    "DoE, JMP, Minitab, R, Python, data visualization and AI-based tools",
+    "Analytics: HPLC, DLS, DSC, NanoDSF, CE-SDS, TFF, MFI"
+  ];
+  const specific = {
+    cmc: isFrench
+      ? ["Coordination CMC, QC, MSAT, production, qualité, CDMO/CRO", "IMP, devis, budgets, change controls, suivi d'actions", "Documentation : protocoles, SOP, rapports, CTD Module 3"]
+      : ["CMC coordination, QC, MSAT, production, quality, CDMO/CRO", "IMP, quotes, budgets, change controls, action tracking", "Documentation: protocols, SOPs, reports, CTD Module 3"],
+    msat: isFrench
+      ? ["Scale-up, industrialisation, transfert de technologie", "Procédés : mixing, filtration, remplissage aseptique, lyophilisation", "Troubleshooting, compatibilité, support production"]
+      : ["Scale-up, industrialization, technology transfer", "Processes: mixing, filtration, aseptic filling, lyophilization", "Troubleshooting, compatibility, production support"],
+    regulatory: isFrench
+      ? ["Documentation CMC, IMP, CTD Module 3, conformité qualité", "Change controls, données développement, traçabilité", "Interface réglementaire, qualité, analytique et production"]
+      : ["CMC documentation, IMP, CTD Module 3, quality compliance", "Change controls, development data, traceability", "Regulatory, quality, analytical and production interface"],
+    proposal: isFrench
+      ? ["Rédaction technique : protocoles, rapports, templates, contenus proposals", "Structuration des besoins techniques, ressources et faisabilité", "Communication client en français et anglais"]
+      : ["Technical writing: protocols, reports, templates, proposal content", "Structuring technical needs, resources and feasibility", "Client communication in French and English"],
+    formulation: isFrench
+      ? ["Formulation liquide et lyophilisée, stabilité, compatibilité", "Procédés : mixing, filtration, remplissage aseptique, lyophilisation", "Troubleshooting formulation/procédés et support développement"]
+      : ["Liquid and lyophilized formulation, stability, compatibility", "Processes: mixing, filtration, aseptic filling, lyophilization", "Formulation/process troubleshooting and development support"]
+  };
+  return [...(specific[type] || specific.formulation), ...(isFrench ? commonFr : commonEn)];
+}
+
+function getTargetedExperience(type, isFrench) {
+  const fr = {
+    aurobac: {
+      role: "CMC Project Manager",
+      company: "Aurobac - Lyon, France",
+      dates: "Juin 2025 - Septembre 2025",
+      bullets: [
+        "Pilotage des activités CMC pour un programme de peptides antimicrobiens, incluant des formulations liposomales.",
+        "Coordination et évaluation de partenaires CDMO/CRO pour la formulation et le développement analytique.",
+        "Gestion des IMP cliniques : reconditionnement, approvisionnement, conformité réglementaire et qualité.",
+        "Suivi des devis, budgets, change controls et décisions techniques liées à la faisabilité projet.",
+        "Contribution à la stratégie de développement pharmaceutique en environnement CMC."
+      ]
+    },
+    catalent: {
+      role: "Chargée de Développement Pharmaceutique - Biologics / Drug Product",
+      company: "Catalent CDMO - Limoges, France",
+      dates: "Juillet 2022 - Juin 2025",
+      bullets: [
+        "Développement de formulations injectables liquides et lyophilisées jusqu'à la production GMP pour 6 molécules First-in-Human.",
+        "Coordination d'environ 18 projets de formulation/CMC avec QC, MSAT, production, analytique, qualité et PM.",
+        "Conception et réalisation d'études de formulation et procédés : mixing, filtration, remplissage aseptique, lyophilisation, compatibilité et troubleshooting.",
+        "Support à l'industrialisation, au scale-up, au transfert de technologie et à la résolution de problématiques techniques.",
+        "Rédaction de protocoles, SOP, rapports, labbooks, méthodes analytiques, templates et contenus CMC.",
+        "Interaction clients en français et anglais sur l'avancement, les résultats et les décisions techniques."
+      ]
+    },
+    sanofi: {
+      role: "Stage de fin d'études - Développement de formulation",
+      company: "Sanofi Pasteur - Marcy-l'Etoile, France",
+      dates: "Mars 2021 - Août 2021",
+      bullets: [
+        "Planification et réalisation d'études de formulation/procédés pour vaccins selon une approche QbD/ICH Q8.",
+        "Application de DoE pour optimiser le design expérimental, analyser la stabilité et soutenir la prise de décision."
+      ]
+    }
+  };
+  const en = {
+    aurobac: {
+      role: "CMC Project Manager",
+      company: "Aurobac - Lyon, France",
+      dates: "June 2025 - September 2025",
+      bullets: [
+        "Led CMC activities for an antimicrobial peptide program, including liposomal formulations.",
+        "Coordinated and evaluated CDMO/CRO partners for formulation and analytical development.",
+        "Managed clinical IMP activities: repackaging, supply, regulatory and quality compliance.",
+        "Tracked quotes, budgets, change controls and technical feasibility decisions.",
+        "Contributed to pharmaceutical development strategy in a CMC environment."
+      ]
+    },
+    catalent: {
+      role: "Pharmaceutical Development Scientist - Biologics / Drug Product",
+      company: "Catalent CDMO - Limoges, France",
+      dates: "July 2022 - June 2025",
+      bullets: [
+        "Developed liquid and lyophilized injectable formulations up to GMP production for 6 First-in-Human molecules.",
+        "Coordinated around 18 formulation/CMC projects with QC, MSAT, production, analytical, quality and PM teams.",
+        "Designed and executed formulation/process studies: mixing, filtration, aseptic filling, lyophilization, compatibility and troubleshooting.",
+        "Supported industrialization, scale-up, technology transfer and technical issue resolution.",
+        "Wrote protocols, SOPs, reports, labbooks, analytical methods, templates and CMC content.",
+        "Interacted with clients in French and English on progress, results and technical decisions."
+      ]
+    },
+    sanofi: {
+      role: "Final Internship - Formulation Development",
+      company: "Sanofi Pasteur - Marcy-l'Etoile, France",
+      dates: "March 2021 - August 2021",
+      bullets: [
+        "Planned and performed vaccine formulation/process studies with a QbD/ICH Q8 approach.",
+        "Applied DoE to optimize experimental design, analyze stability and support decision-making."
+      ]
+    }
+  };
+  const data = isFrench ? fr : en;
+  const order = type === "cmc" || type === "regulatory" || type === "proposal"
+    ? ["aurobac", "catalent", "sanofi"]
+    : ["catalent", "aurobac", "sanofi"];
+  return order.map((key) => ({ ...data[key], bullets: prioritizeBullets(data[key].bullets, type) }));
+}
+
+function prioritizeBullets(bullets, type) {
+  const terms = {
+    cmc: ["cmc", "coordination", "cdmo", "cro", "imp", "budgets", "change", "documentation"],
+    msat: ["industrialisation", "industrialization", "scale-up", "transfert", "transfer", "production", "troubleshooting", "procédés", "process"],
+    regulatory: ["imp", "réglementaire", "regulatory", "ctd", "documentation", "sop", "qualité", "quality", "change"],
+    proposal: ["clients", "rédaction", "writing", "templates", "contenus", "content", "faisabilité", "feasibility"],
+    formulation: ["formulation", "injectables", "lyophilisées", "lyophilized", "stabilité", "stability", "doe", "qbd"]
+  }[type] || [];
+  return [...bullets].sort((a, b) => scoreText(b, terms) - scoreText(a, terms)).slice(0, type === "formulation" ? 5 : 4);
+}
+
+function scoreText(text, terms) {
+  const lower = text.toLowerCase();
+  return terms.reduce((score, term) => score + (lower.includes(term) ? 1 : 0), 0);
+}
+
 function generateFormattedCv() {
   const cv = buildCvProfile();
   const isFrench = ($("cvLanguage").value || "fr") === "fr";
   $("formattedCvPreview").innerHTML = `
     <aside class="cv-sidebar">
-      <h1>${escapeHtml(cv.name)}</h1>
-      <p class="cv-title">${escapeHtml(cv.title)}</p>
       <div class="cv-contact">
+        <h2>${isFrench ? "Contact" : "Contact"}</h2>
         <p>${escapeHtml(cv.location)}</p>
         ${cv.email ? `<p>${escapeHtml(cv.email)}</p>` : ""}
         ${cv.phone ? `<p>${escapeHtml(cv.phone)}</p>` : ""}
+        <p>${escapeHtml(cv.driving)}</p>
       </div>
-      <section>
-        <h2>${isFrench ? "Compétences" : "Skills"}</h2>
-        <ul>${cv.skills.map((skill) => `<li>${escapeHtml(skill)}</li>`).join("")}</ul>
-      </section>
       <section>
         <h2>${isFrench ? "Langues" : "Languages"}</h2>
         <ul>${cv.languages.map((language) => `<li>${escapeHtml(language)}</li>`).join("")}</ul>
@@ -1064,11 +1253,30 @@ function generateFormattedCv() {
         <h2>${isFrench ? "Formation" : "Education"}</h2>
         <ul>${cv.education.map((education) => `<li>${escapeHtml(education)}</li>`).join("")}</ul>
       </section>
+      <section>
+        <h2>${isFrench ? "Compétences" : "Skills"}</h2>
+        <ul>${cv.skills.map((skill) => `<li>${escapeHtml(skill)}</li>`).join("")}</ul>
+      </section>
     </aside>
     <main class="cv-main">
+      <header class="cv-hero">
+        <p class="cv-name">${escapeHtml(cv.name)}</p>
+        <h1>${escapeHtml(cv.title)}</h1>
+        <p>${escapeHtml(cv.subtitle)}</p>
+      </header>
+      ${cv.target ? `
+        <section class="cv-target">
+          <h2>${isFrench ? "Candidature ciblée" : "Target application"}</h2>
+          <p>${escapeHtml(cv.target)}</p>
+        </section>
+      ` : ""}
       <section>
         <h2>${isFrench ? "Résumé" : "Profile"}</h2>
         ${cv.summary.map((line) => `<p>${escapeHtml(line)}</p>`).join("")}
+      </section>
+      <section>
+        <h2>${isFrench ? "Atouts pour ce poste" : "Fit for this role"}</h2>
+        <ul>${cv.fitHighlights.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}</ul>
       </section>
       <section>
         <h2>${isFrench ? "Expériences professionnelles" : "Professional Experience"}</h2>

@@ -531,41 +531,55 @@ article h3 {
   border: 1px solid var(--line);
   border-radius: 8px;
   display: grid;
-  grid-template-columns: 285px minmax(0, 1fr);
+  grid-template-columns: 260px minmax(0, 1fr);
   margin: 0 auto;
-  max-width: 980px;
+  max-width: 900px;
   min-height: 1120px;
   overflow: hidden;
 }
 
 .cv-sidebar {
-  background: #f1f5f4;
+  background: #f2f4f3;
   border-right: 1px solid var(--line);
-  padding: 30px 24px;
+  padding: 34px 22px;
 }
 
-.cv-sidebar h1 {
-  font-size: 2.1rem;
+.cv-hero {
+  border-bottom: 2px solid var(--accent);
+  margin-bottom: 22px;
+  padding-bottom: 18px;
+}
+
+.cv-name {
+  color: var(--ink);
+  font-size: 2.45rem;
+  font-weight: 900;
   letter-spacing: 0;
   line-height: 1;
-  margin: 0 0 10px;
+  margin: 0 0 8px;
   text-transform: uppercase;
 }
 
+.cv-hero h1 {
+  font-size: 1.35rem;
+  line-height: 1.15;
+  margin: 0 0 8px;
+}
+
+.cv-hero p:last-child,
 .cv-title {
   color: var(--accent-strong);
-  font-size: 1rem;
+  font-size: 0.98rem;
   font-weight: 900;
-  margin: 0 0 20px;
+  margin: 0;
 }
 
 .cv-contact {
-  border-bottom: 1px solid var(--line);
-  border-top: 1px solid var(--line);
+  border-bottom: 1px solid #cbd5d3;
   color: var(--muted);
   font-size: 0.86rem;
   margin-bottom: 22px;
-  padding: 14px 0;
+  padding-bottom: 16px;
 }
 
 .cv-contact p,
@@ -584,6 +598,12 @@ article h3 {
   letter-spacing: 0.12em;
   margin: 0 0 10px;
   text-transform: uppercase;
+}
+
+.cv-target {
+  background: #f3f8f7;
+  border-left: 4px solid var(--accent);
+  padding: 12px 14px;
 }
 
 .cv-page ul {
