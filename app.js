@@ -72,6 +72,8 @@ const starter = {
   companyName: "",
   roleTitle: "",
   selectedJobNotes: "",
+  cvLanguage: "fr",
+  formattedCvTitle: "",
   cvDraft: "",
   letterDraft: "",
   tracker: []
@@ -95,6 +97,8 @@ const fields = [
   "companyName",
   "roleTitle",
   "selectedJobNotes",
+  "cvLanguage",
+  "formattedCvTitle",
   "cvDraft",
   "letterDraft"
 ];
@@ -763,6 +767,7 @@ function getFitNote(score = 0) {
 function prepareApplication(job) {
   $("companyName").value = job.company;
   $("roleTitle").value = job.title;
+  $("formattedCvTitle").value = suggestCvTitle(job);
   $("selectedJobNotes").value = [
     `${job.title} - ${job.company}`,
     `Location: ${job.location}`,
@@ -777,10 +782,20 @@ function prepareApplication(job) {
   $("jobDescription").value = $("selectedJobNotes").value;
   saveState();
   generateDocuments();
+  generateFormattedCv();
   document.querySelectorAll(".tab, .panel").forEach((el) => el.classList.remove("active"));
   document.querySelector('[data-tab="documents"]').classList.add("active");
   $("documents").classList.add("active");
   showToast("Application drafts prepared");
+}
+
+function suggestCvTitle(job) {
+  const title = (job.title || "").toLowerCase();
+  if (title.includes("cmc") || title.includes("project")) return "CMC Project Manager | Drug Product Biologics | CDMO Coordination";
+  if (title.includes("msat") || title.includes("tech transfer")) return "Drug Product / MSAT Scientist | Biologics | Tech Transfer";
+  if (title.includes("regulatory")) return "Regulatory CMC Associate | Injectable Biologics | Drug Product";
+  if (title.includes("proposal")) return "Technical Proposal Writer | CDMO | Biologics Drug Product";
+  return "Pharmaceutical Development Scientist | Sterile Injectable Biologics";
 }
 
 function copyJobSummary() {
@@ -819,6 +834,204 @@ function copyWorldwideSummary() {
 
 function renderWorldwideSearchStrings() {
   renderChips("worldwideSearchStrings", worldwideSearchTemplates);
+}
+
+function buildCvProfile() {
+  const source = $("sourceCv").value || "";
+  const relevant = [
+    $("relevantExperience").value,
+    $("quickRelevantExperience").value,
+    $("coreExperience").value,
+    $("skills").value,
+    $("pmExperience").value
+  ].filter(Boolean).join("\n");
+  const combined = `${source}\n${relevant}`;
+  const language = $("cvLanguage").value || "fr";
+  const selectedTitle = $("formattedCvTitle").value.trim() || $("roleTitle").value.trim();
+  const isFrench = language === "fr";
+  const email = (combined.match(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/i) || [""])[0];
+  const phone = (combined.match(/(\+33\s?\d(?:[\s.-]?\d{2}){4}|0\d(?:[\s.-]?\d{2}){4})/) || [""])[0];
+
+  return {
+    name: "Yawen GUO",
+    title: selectedTitle || (isFrench
+      ? "Chargée de Développement Pharmaceutique CMC - Drug Product"
+      : "CMC Pharmaceutical Development Scientist - Drug Product"),
+    location: "Lyon, France",
+    email,
+    phone,
+    languages: isFrench
+      ? ["Chinois : langue maternelle", "Français : bilingue", "Anglais : bilingue"]
+      : ["Chinese: native", "French: bilingual", "English: bilingual"],
+    summary: isFrench
+      ? [
+          "Scientifique en développement pharmaceutique spécialisée dans les produits injectables stériles et biologiques.",
+          "Expérience en formulation, procédés, lyophilisation, QbD/DoE, documentation CMC et coordination transverse en environnement CDMO et Big Pharma.",
+          "Profil à l'interface entre Drug Product, MSAT/tech transfer, CMC project management et partenaires CDMO/CRO."
+        ]
+      : [
+          "Pharmaceutical development scientist specialized in sterile injectable and biologics drug products.",
+          "Experience in formulation, process development, lyophilization, QbD/DoE, CMC documentation and cross-functional coordination in CDMO and Big Pharma environments.",
+          "Profile positioned between Drug Product development, MSAT/tech transfer, CMC project management and CDMO/CRO coordination."
+        ],
+    skills: isFrench
+      ? [
+          "Développement pharmaceutique - injectables stériles, biologiques, Drug Product",
+          "Formulation liquide et lyophilisée, stabilité, compatibilité, troubleshooting",
+          "Procédés : mixing, filtration, remplissage aseptique, lyophilisation, scale-up",
+          "QbD / ICH Q8 : QTPP, CQA, CPP, CMA, design space",
+          "DoE, JMP, Minitab, R, Python, visualisation et outils IA",
+          "Analytique : HPLC, DLS, DSC, NanoDSF, CE-SDS, TFF, MFI",
+          "CMC : protocoles, SOP, rapports, CTD Module 3, IMP, change controls",
+          "Coordination QC, MSAT, production, analytique, qualité, CDMO/CRO"
+        ]
+      : [
+          "Pharmaceutical development - sterile injectables, biologics, Drug Product",
+          "Liquid and lyophilized formulation, stability, compatibility, troubleshooting",
+          "Processes: mixing, filtration, aseptic filling, lyophilization, scale-up",
+          "QbD / ICH Q8: QTPP, CQA, CPP, CMA, design space",
+          "DoE, JMP, Minitab, R, Python, data visualization and AI-based tools",
+          "Analytics: HPLC, DLS, DSC, NanoDSF, CE-SDS, TFF, MFI",
+          "CMC: protocols, SOPs, reports, CTD Module 3, IMP, change controls",
+          "Coordination with QC, MSAT, production, analytical, quality, CDMO/CRO"
+        ],
+    experience: isFrench
+      ? [
+          {
+            role: "CMC Project Manager",
+            company: "Aurobac - Lyon, France",
+            dates: "Juin 2025 - Septembre 2025",
+            bullets: [
+              "Pilotage des activités CMC pour un programme de peptides antimicrobiens, incluant des formulations liposomales.",
+              "Coordination et suivi de partenaires externes CDMO/CRO pour les activités de formulation et développement analytique.",
+              "Gestion des activités liées aux IMP cliniques, au reconditionnement, à l'approvisionnement et à la conformité réglementaire.",
+              "Suivi des budgets, devis, change controls et contribution à la stratégie de développement pharmaceutique."
+            ]
+          },
+          {
+            role: "Chargée de Développement Pharmaceutique - Biologics / Drug Product",
+            company: "Catalent CDMO - Limoges, France",
+            dates: "Juillet 2022 - Juin 2025",
+            bullets: [
+              "Développement de formulations injectables liquides et lyophilisées jusqu'à la production GMP pour 6 molécules First-in-Human.",
+              "Coordination d'environ 18 projets de formulation/CMC avec les équipes QC, MSAT, production, analytique, qualité et PM.",
+              "Conception et réalisation d'études de formulation et procédés : mixing, filtration, remplissage aseptique, lyophilisation, compatibilité et troubleshooting.",
+              "Rédaction de protocoles, SOP, rapports, labbooks, méthodes analytiques, templates et éléments de documentation CMC.",
+              "Support à l'industrialisation, au scale-up, au transfert de technologie et aux interactions clients en français et anglais."
+            ]
+          },
+          {
+            role: "Stage de fin d'études - Développement de formulation",
+            company: "Sanofi Pasteur - Marcy-l'Etoile, France",
+            dates: "Mars 2021 - Août 2021",
+            bullets: [
+              "Planification et réalisation d'études de formulation et procédés pour vaccins, avec approche QbD/ICH Q8.",
+              "Application de DoE pour l'optimisation expérimentale, analyse de stabilité et visualisation de données pour soutenir les décisions."
+            ]
+          }
+        ]
+      : [
+          {
+            role: "CMC Project Manager",
+            company: "Aurobac - Lyon, France",
+            dates: "June 2025 - September 2025",
+            bullets: [
+              "Led CMC activities for an antimicrobial peptide development program, including innovative liposomal formulations.",
+              "Coordinated external CDMO/CRO partners for formulation and analytical development activities.",
+              "Managed clinical IMP-related activities, repackaging, supply and regulatory/quality compliance follow-up.",
+              "Tracked budgets, quotes, change controls and contributed to pharmaceutical development strategy."
+            ]
+          },
+          {
+            role: "Pharmaceutical Development Scientist - Biologics / Drug Product",
+            company: "Catalent CDMO - Limoges, France",
+            dates: "July 2022 - June 2025",
+            bullets: [
+              "Developed liquid and lyophilized injectable formulations up to GMP production for 6 First-in-Human molecules.",
+              "Coordinated around 18 formulation/CMC projects with QC, MSAT, production, analytical, quality and PM teams.",
+              "Designed and executed formulation/process studies: mixing, filtration, aseptic filling, lyophilization, compatibility and troubleshooting.",
+              "Wrote protocols, SOPs, reports, labbooks, analytical methods, templates and CMC documentation inputs.",
+              "Supported industrialization, scale-up, technology transfer and client interactions in French and English."
+            ]
+          },
+          {
+            role: "Final Internship - Formulation Development",
+            company: "Sanofi Pasteur - Marcy-l'Etoile, France",
+            dates: "March 2021 - August 2021",
+            bullets: [
+              "Planned and performed vaccine formulation/process development studies with a QbD/ICH Q8 approach.",
+              "Applied DoE for experimental optimization, stability analysis and data visualization to support formulation decisions."
+            ]
+          }
+        ],
+    education: isFrench
+      ? ["Master en Biotechnologie et Ingénierie des Biomolécules - ENSTBB, France, 2019-2021", "Licence en Biologie - Henan Agricultural University, Chine, 2015-2019", "Certification ICH E6 (R2) - Good Clinical Practice"]
+      : ["MSc Biotechnology and Biomolecule Engineering - ENSTBB, France, 2019-2021", "BSc Biology - Henan Agricultural University, China, 2015-2019", "ICH E6 (R2) Good Clinical Practice certification"],
+    publications: [
+      "Bayesian optimization and machine learning for vaccine formulation development",
+      "Development of nucleic acid isolation by non-silica-based nanoparticles and real-time PCR kit for edible vegetable oil traceability"
+    ]
+  };
+}
+
+function generateFormattedCv() {
+  const cv = buildCvProfile();
+  const isFrench = ($("cvLanguage").value || "fr") === "fr";
+  $("formattedCvPreview").innerHTML = `
+    <aside class="cv-sidebar">
+      <h1>${escapeHtml(cv.name)}</h1>
+      <p class="cv-title">${escapeHtml(cv.title)}</p>
+      <div class="cv-contact">
+        <p>${escapeHtml(cv.location)}</p>
+        ${cv.email ? `<p>${escapeHtml(cv.email)}</p>` : ""}
+        ${cv.phone ? `<p>${escapeHtml(cv.phone)}</p>` : ""}
+      </div>
+      <section>
+        <h2>${isFrench ? "Compétences" : "Skills"}</h2>
+        <ul>${cv.skills.map((skill) => `<li>${escapeHtml(skill)}</li>`).join("")}</ul>
+      </section>
+      <section>
+        <h2>${isFrench ? "Langues" : "Languages"}</h2>
+        <ul>${cv.languages.map((language) => `<li>${escapeHtml(language)}</li>`).join("")}</ul>
+      </section>
+      <section>
+        <h2>${isFrench ? "Formation" : "Education"}</h2>
+        <ul>${cv.education.map((education) => `<li>${escapeHtml(education)}</li>`).join("")}</ul>
+      </section>
+    </aside>
+    <main class="cv-main">
+      <section>
+        <h2>${isFrench ? "Résumé" : "Profile"}</h2>
+        ${cv.summary.map((line) => `<p>${escapeHtml(line)}</p>`).join("")}
+      </section>
+      <section>
+        <h2>${isFrench ? "Expériences professionnelles" : "Professional Experience"}</h2>
+        ${cv.experience.map((job) => `
+          <article class="cv-job">
+            <header>
+              <div>
+                <h3>${escapeHtml(job.role)}</h3>
+                <p>${escapeHtml(job.company)}</p>
+              </div>
+              <span>${escapeHtml(job.dates)}</span>
+            </header>
+            <ul>${job.bullets.map((bullet) => `<li>${escapeHtml(bullet)}</li>`).join("")}</ul>
+          </article>
+        `).join("")}
+      </section>
+      <section>
+        <h2>${isFrench ? "Publications" : "Publications"}</h2>
+        <ul>${cv.publications.map((publication) => `<li>${escapeHtml(publication)}</li>`).join("")}</ul>
+      </section>
+    </main>
+  `;
+  saveState();
+  showToast("Formatted CV generated");
+}
+
+function printFormattedCv() {
+  generateFormattedCv();
+  window.print();
 }
 
 function openPrioritySearch() {
@@ -867,6 +1080,8 @@ $("resetDemo").addEventListener("click", () => {
 $("analyzeJd").addEventListener("click", analyzeJob);
 $("generateDocs").addEventListener("click", generateDocuments);
 $("copyDocs").addEventListener("click", copyDocuments);
+$("generateFormattedCv").addEventListener("click", generateFormattedCv);
+$("printFormattedCv").addEventListener("click", printFormattedCv);
 $("addTracker").addEventListener("click", addTrackerItem);
 $("copyJobSummary").addEventListener("click", copyJobSummary);
 $("copyWorldwideSummary").addEventListener("click", copyWorldwideSummary);
@@ -894,4 +1109,5 @@ renderSearchStrings();
 renderDailyFinder();
 renderWorldwideSuggestions();
 renderWorldwideSearchStrings();
+generateFormattedCv();
 analyzeJob();

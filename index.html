@@ -61,6 +61,7 @@
           <button class="tab" data-tab="profile">Profile</button>
           <button class="tab" data-tab="jd">Job fit</button>
           <button class="tab" data-tab="documents">CV & letter</button>
+          <button class="tab" data-tab="formattedcv">Formatted CV</button>
           <button class="tab" data-tab="tracker">Tracker</button>
           <button class="tab" data-tab="search">Search plan</button>
         </nav>
@@ -269,6 +270,33 @@
               <textarea id="letterDraft" rows="18"></textarea>
             </label>
           </div>
+        </section>
+
+        <section id="formattedcv" class="panel">
+          <div class="panel-heading">
+            <div>
+              <p class="eyebrow">Adapted CV</p>
+              <h2>Generate a formatted CV from your real CV source.</h2>
+            </div>
+            <div class="button-row">
+              <button id="generateFormattedCv" class="primary">Generate formatted CV</button>
+              <button id="printFormattedCv" class="secondary">Print / save PDF</button>
+            </div>
+          </div>
+          <div class="document-grid cv-controls">
+            <label>
+              CV language
+              <select id="cvLanguage">
+                <option value="fr">French</option>
+                <option value="en">English</option>
+              </select>
+            </label>
+            <label>
+              Target CV title
+              <input id="formattedCvTitle" type="text" placeholder="Example: Chargée de Développement Pharmaceutique CMC">
+            </label>
+          </div>
+          <div id="formattedCvPreview" class="cv-page"></div>
         </section>
 
         <section id="tracker" class="panel">
