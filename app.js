@@ -290,6 +290,7 @@ function generateDocuments() {
   const company = $("companyName").value.trim() || "your company";
   const role = $("roleTitle").value.trim() || "this role";
   const jd = [$("jobDescription").value.trim(), $("selectedJobNotes").value.trim()].filter(Boolean).join("\n\n");
+  const isFrenchApplication = shouldUseFrenchApplication(jd);
   const sourceCv = $("sourceCv").value.trim();
   const relevantExperience = [
     $("relevantExperience").value.trim(),
@@ -303,7 +304,49 @@ function generateDocuments() {
   const customEvidence = splitLines(relevantExperience).slice(0, 6);
   const jdKeywords = extractKeywords(jd).slice(0, 8);
 
-  $("cvDraft").value = [
+  $("cvDraft").value = isFrenchApplication
+    ? buildFrenchCvDraft({ role, company, customEvidence, cvEvidence, experience, achievements, pm, jdKeywords, topSkills })
+    : buildEnglishCvDraft({ role, company, customEvidence, cvEvidence, experience, achievements, pm, jdKeywords, topSkills });
+
+  $("letterDraft").value = isFrenchApplication
+    ? buildFrenchLetterDraft({ role, company, cvEvidence, achievements, jdKeywords })
+    : buildEnglishLetterDraft({ role, company, cvEvidence, achievements, jdKeywords });
+
+  saveState();
+  showToast("Drafts generated");
+}
+
+function cleanSentence(text) {
+  const trimmed = text.replace(/^example:\s*/i, "").trim();
+  return trimmed.endsWith(".") ? trimmed : `${trimmed}.`;
+}
+
+function shouldUseFrenchApplication(jobText) {
+  const text = jobText.toLowerCase();
+  const worldwideSignals = ["germany", "austria", "hungary", "united kingdom", "united states", "remote europe", "outside france"];
+  return !worldwideSignals.some((signal) => text.includes(signal));
+}
+
+function buildFrenchCvDraft({ role, company, customEvidence, cvEvidence, experience, achievements, pm, jdKeywords, topSkills }) {
+  return [
+    `Profil cible - ${role}`,
+    "",
+    `Chargée de développement pharmaceutique spécialisée en produits injectables stériles et biologiques, avec 3,5 ans d'expérience en formulation et développement de procédés, complétés par une expérience récente en coordination de projets CMC. Pour le poste ${role} chez ${company}, je mettrais surtout en avant mon expérience Drug Product, mon approche QbD/DoE et ma capacité à coordonner les interfaces CMC, analytique, qualité, production et partenaires externes.`,
+    "",
+    "Expériences à mettre en avant :",
+    ...customEvidence.map((item) => `- ${item}`),
+    ...cvEvidence.map((item) => `- ${item}`),
+    ...experience.map((item) => `- ${item}`),
+    ...achievements.map((item) => `- ${item}`),
+    ...pm.map((item) => `- ${item}`),
+    "",
+    "Mots-clés à intégrer naturellement :",
+    jdKeywords.length ? jdKeywords.join(", ") : topSkills.join(", ")
+  ].join("\n");
+}
+
+function buildEnglishCvDraft({ role, company, customEvidence, cvEvidence, experience, achievements, pm, jdKeywords, topSkills }) {
+  return [
     `Profile for ${role}`,
     "",
     `I bring 3.5 years of hands-on formulation and process development experience for injectable monoclonal antibody medicines, plus recent exposure to CMC project coordination. My strongest value is at the point where technical drug product work, clear documentation, and cross-functional follow-up need to come together.`,
@@ -318,8 +361,38 @@ function generateDocuments() {
     "Terms to reflect naturally, without forcing them:",
     jdKeywords.length ? jdKeywords.join(", ") : topSkills.join(", ")
   ].join("\n");
+}
 
-  $("letterDraft").value = [
+function buildFrenchLetterDraft({ role, company, cvEvidence, achievements, jdKeywords }) {
+  return [
+    `Madame, Monsieur,`,
+    "",
+    `Je vous adresse ma candidature pour le poste de ${role} au sein de ${company}. Ce poste m'intéresse car il correspond à l'évolution que je souhaite donner à mon parcours : rester proche du développement pharmaceutique des produits injectables et biologiques, tout en renforçant la dimension CMC, coordination transverse et contribution aux décisions techniques.`,
+    "",
+    `Au cours de mes 3,5 années en développement de formulation et de procédés, j'ai travaillé sur des médicaments injectables à base d'anticorps monoclonaux et sur des produits biologiques en environnement CDMO. Cette expérience m'a permis de développer une vision concrète des choix de formulation, des contraintes procédés, de la stabilité, de la documentation scientifique et des échanges nécessaires avec les équipes analytiques, qualité, production, MSAT et CMC.`,
+    "",
+    cvEvidence.length
+      ? `Les éléments de mon parcours que je relierais le plus directement à votre besoin sont les suivants : ${cvEvidence.map(cleanSentence).join(" ")}`
+      : `Je mettrais particulièrement en avant mon expérience en Drug Product injectable, documentation CMC, suivi de projets et coordination avec plusieurs métiers.`,
+    "",
+    achievements.length
+      ? `Parmi les exemples concrets que je peux apporter : ${achievements.map(cleanSentence).join(" ")}`
+      : `J'apporte une approche rigoureuse, une bonne capacité de synthèse et l'habitude de transformer des résultats expérimentaux en recommandations claires pour la suite du développement.`,
+    "",
+    jdKeywords.length
+      ? `J'ai également noté l'importance de ${jdKeywords.slice(0, 5).join(", ")}. Ce sont des sujets sur lesquels je peux faire le lien entre mon expérience actuelle et les responsabilités du poste.`
+      : `Ce qui m'attire dans ce poste est l'équilibre entre expertise technique, coordination et impact concret sur le développement de produits de santé.`,
+    "",
+    `Je serais ravie d'échanger avec vous afin de vous présenter plus en détail la manière dont mon expérience en formulation, développement de procédés et coordination CMC pourrait contribuer à vos projets.`,
+    "",
+    `Je vous remercie pour votre attention et vous prie d'agréer, Madame, Monsieur, l'expression de mes salutations distinguées.`,
+    "",
+    `Yawen Guo`
+  ].join("\n");
+}
+
+function buildEnglishLetterDraft({ role, company, cvEvidence, achievements, jdKeywords }) {
+  return [
     `Dear Hiring Team,`,
     "",
     `I was interested in the ${role} position at ${company} because it sits close to the kind of work I want to keep building toward: biologics drug product development, CMC coordination, and practical problem-solving with several teams involved.`,
@@ -341,16 +414,8 @@ function generateDocuments() {
     `I would be glad to discuss how my formulation, process development, and CMC coordination experience could support your team. Thank you for taking the time to consider my application.`,
     "",
     `Sincerely,`,
-    `[Your name]`
+    `Yawen Guo`
   ].join("\n");
-
-  saveState();
-  showToast("Drafts generated");
-}
-
-function cleanSentence(text) {
-  const trimmed = text.replace(/^example:\s*/i, "").trim();
-  return trimmed.endsWith(".") ? trimmed : `${trimmed}.`;
 }
 
 function extractKeywords(text) {
@@ -768,6 +833,7 @@ function prepareApplication(job) {
   $("companyName").value = job.company;
   $("roleTitle").value = job.title;
   $("formattedCvTitle").value = suggestCvTitle(job);
+  $("cvLanguage").value = shouldUseFrenchApplication(`${job.location || ""} ${job.company || ""} ${job.title || ""}`) ? "fr" : "en";
   $("selectedJobNotes").value = [
     `${job.title} - ${job.company}`,
     `Location: ${job.location}`,
