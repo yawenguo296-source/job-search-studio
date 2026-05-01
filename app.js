@@ -1422,7 +1422,10 @@ $("buildDailySearches").addEventListener("click", () => {
   showToast("Daily searches refreshed");
 });
 $("openPrioritySearch").addEventListener("click", openPrioritySearch);
-fields.forEach((field) => $(field).addEventListener("change", saveState));
+fields.forEach((field) => {
+  const element = $(field);
+  if (element) element.addEventListener("change", saveState);
+});
 
 loadState();
 renderTracker();
