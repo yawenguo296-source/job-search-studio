@@ -295,6 +295,14 @@
               Target CV title
               <input id="formattedCvTitle" type="text" placeholder="Example: Chargée de Développement Pharmaceutique CMC">
             </label>
+            <label>
+              CV photo
+              <input id="cvPhotoUpload" type="file" accept="image/png,image/jpeg,image/webp">
+            </label>
+            <div class="photo-actions">
+              <button id="removeCvPhoto" type="button" class="ghost">Remove photo</button>
+              <p id="cvPhotoStatus" class="helper-text">Optional. Stored only in this browser.</p>
+            </div>
           </div>
           <div id="formattedCvPreview" class="cv-page"></div>
         </section>

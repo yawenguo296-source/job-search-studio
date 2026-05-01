@@ -74,6 +74,7 @@ const starter = {
   selectedJobNotes: "",
   cvLanguage: "fr",
   formattedCvTitle: "",
+  cvPhotoData: "",
   cvDraft: "",
   letterDraft: "",
   tracker: []
@@ -99,6 +100,7 @@ const fields = [
   "selectedJobNotes",
   "cvLanguage",
   "formattedCvTitle",
+  "cvPhotoData",
   "cvDraft",
   "letterDraft"
 ];
@@ -188,7 +190,8 @@ function showToast(message) {
 
 function saveState() {
   fields.forEach((field) => {
-    state[field] = $(field).value;
+    const element = $(field);
+    if (element) state[field] = element.value;
   });
   localStorage.setItem("franceBiopharmaJobStudio", JSON.stringify(state));
 }
@@ -207,9 +210,11 @@ function loadState() {
   }
   state.tracker = (state.tracker || []).map((item) => createTrackerItem(item));
   fields.forEach((field) => {
-    $(field).value = state[field] || "";
+    const element = $(field);
+    if (element) element.value = state[field] || "";
   });
   syncRelevantExperience("profile");
+  updatePhotoStatus();
 }
 
 function normalize(text) {
@@ -947,6 +952,7 @@ function buildCvProfile() {
     location: "Lyon, France",
     email,
     phone,
+    photo: state.cvPhotoData || "",
     driving: isFrench ? "Permis B" : "Driving licence B",
     languages: isFrench
       ? ["Chinois : langue maternelle", "Français : bilingue", "Anglais : bilingue"]
@@ -1238,6 +1244,9 @@ function generateFormattedCv() {
   const isFrench = ($("cvLanguage").value || "fr") === "fr";
   $("formattedCvPreview").innerHTML = `
     <aside class="cv-sidebar">
+      <div class="cv-photo ${cv.photo ? "" : "empty"}">
+        ${cv.photo ? `<img src="${cv.photo}" alt="Photo de Yawen Guo">` : `<span>${isFrench ? "Photo" : "Photo"}</span>`}
+      </div>
       <div class="cv-contact">
         <h2>${isFrench ? "Contact" : "Contact"}</h2>
         <p>${escapeHtml(cv.location)}</p>
@@ -1308,6 +1317,43 @@ function printFormattedCv() {
   window.print();
 }
 
+function handleCvPhotoUpload(event) {
+  const file = event.target.files && event.target.files[0];
+  if (!file) return;
+  if (!file.type.startsWith("image/")) {
+    showToast("Please choose an image file");
+    return;
+  }
+  const reader = new FileReader();
+  reader.onload = () => {
+    state.cvPhotoData = reader.result;
+    localStorage.setItem("franceBiopharmaJobStudio", JSON.stringify(state));
+    updatePhotoStatus(file.name);
+    generateFormattedCv();
+    showToast("Photo added to CV");
+  };
+  reader.onerror = () => showToast("Photo upload failed");
+  reader.readAsDataURL(file);
+}
+
+function removeCvPhoto() {
+  state.cvPhotoData = "";
+  localStorage.setItem("franceBiopharmaJobStudio", JSON.stringify(state));
+  const upload = $("cvPhotoUpload");
+  if (upload) upload.value = "";
+  updatePhotoStatus();
+  generateFormattedCv();
+  showToast("Photo removed");
+}
+
+function updatePhotoStatus(name = "") {
+  const status = $("cvPhotoStatus");
+  if (!status) return;
+  status.textContent = state.cvPhotoData
+    ? `Photo loaded${name ? `: ${name}` : ""}. Stored only in this browser.`
+    : "Optional. Stored only in this browser.";
+}
+
 function openPrioritySearch() {
   const first = $("dailySearchLinks").querySelector("a");
   if (!first) {
@@ -1356,6 +1402,8 @@ $("generateDocs").addEventListener("click", generateDocuments);
 $("copyDocs").addEventListener("click", copyDocuments);
 $("generateFormattedCv").addEventListener("click", generateFormattedCv);
 $("printFormattedCv").addEventListener("click", printFormattedCv);
+$("cvPhotoUpload").addEventListener("change", handleCvPhotoUpload);
+$("removeCvPhoto").addEventListener("click", removeCvPhoto);
 $("addTracker").addEventListener("click", addTrackerItem);
 $("copyJobSummary").addEventListener("click", copyJobSummary);
 $("copyWorldwideSummary").addEventListener("click", copyWorldwideSummary);

@@ -348,6 +348,12 @@ textarea {
   margin-bottom: 18px;
 }
 
+.photo-actions {
+  align-self: end;
+  display: grid;
+  gap: 8px;
+}
+
 .full {
   grid-column: 1 / -1;
 }
@@ -542,6 +548,33 @@ article h3 {
   background: #f2f4f3;
   border-right: 1px solid var(--line);
   padding: 34px 22px;
+}
+
+.cv-photo {
+  align-items: center;
+  background: white;
+  border: 2px solid #d4dedc;
+  border-radius: 999px;
+  display: flex;
+  height: 142px;
+  justify-content: center;
+  margin: 0 auto 24px;
+  overflow: hidden;
+  width: 142px;
+}
+
+.cv-photo img {
+  height: 100%;
+  object-fit: cover;
+  width: 100%;
+}
+
+.cv-photo.empty span {
+  color: var(--muted);
+  font-size: 0.82rem;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
 }
 
 .cv-hero {
