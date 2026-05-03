@@ -36,6 +36,8 @@ The search is intentionally broader than exact scientist titles. It now includes
 
 There is also a separate `Worldwide fit` tab. It is powered by `worldwide-jobs.js` and a daily 08:50 Europe/Paris automation named `Update worldwide job suggestions`. This list is only for strong opportunities outside France, including Europe, remote roles, and selected high-salary global benchmarks.
 
+The `CDMO jobs` tab is dedicated to CDMO/CDMO-adjacent opportunities, including proposal management, technical writing, client project management, business development, technical sales, field application, customer success, QA project management, CMC, MSAT, and tech transfer. This section is intentionally broader than scientist roles and screens for salary/growth potential.
+
 Each recommended job card includes a salary line. When a posting/source shows pay, the card says `Source-listed`; otherwise it gives an `Estimated` range based on role, country, seniority, and market level. Treat estimates as a screening guide, then verify during recruiter contact.
 
 Jobs are ranked from highest to lowest fit score. Click `Prepare application` on any job card to send that job's title, company, salary, fit notes, and application angles into the CV & letter tab. Paste your real CV into the Profile tab first for stronger drafts based on your actual experience.

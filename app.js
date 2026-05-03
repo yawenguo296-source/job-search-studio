@@ -1,5 +1,10 @@
 const starter = {
   targetRoles: [
+    "Technical Sales Specialist / Field Application Specialist - life sciences / bioprocess",
+    "Customer Success Specialist / Customer Success Manager - pharma, biotech, healthcare",
+    "Proposal Writer / Proposal Manager - CDMO / biotech services",
+    "Business Development Associate / Account Manager - CDMO, CRO, life sciences tools",
+    "Application Sales Specialist - LIMS/ELN, lab software, scientific instruments",
     "CMC Technical Project Manager / CMC Coordinator",
     "MSAT Scientist or Engineer - biologics / sterile manufacturing",
     "Tech Transfer Scientist or Engineer - drug product / biologics",
@@ -17,6 +22,14 @@ const starter = {
     "biologics",
     "mAb",
     "injectable",
+    "pharma",
+    "biotech",
+    "life sciences",
+    "customer success",
+    "technical sales",
+    "field application",
+    "proposal",
+    "business development",
     "process development",
     "CMC",
     "MSAT",
@@ -28,6 +41,14 @@ const starter = {
     "fill-finish",
     "sterile",
     "CDMO",
+    "CRO",
+    "B2B",
+    "client-facing",
+    "account management",
+    "customer support",
+    "scientific instruments",
+    "LIMS",
+    "ELN",
     "regulatory CMC",
     "PMO",
     "validation",
@@ -36,11 +57,12 @@ const starter = {
     "DLS"
   ].join("\n"),
   excludeKeywords: [
-    "commercial sales",
     "cosmetics only",
     "senior director",
     "10+ years",
-    "animal health only"
+    "animal health only",
+    "retail sales without scientific content",
+    "call center without healthcare/science context"
   ].join("\n"),
   coreExperience: [
     "3.5 years as a formulation and process development scientist for injectable monoclonal antibody medicines.",
@@ -115,6 +137,12 @@ const keywordGroups = [
 ];
 
 const searchTemplates = [
+  '"technical sales specialist" life sciences France',
+  '"field application specialist" biotechnology France',
+  '"customer success specialist" pharma France',
+  '"proposal manager" CDMO France',
+  '"business development associate" CDMO France',
+  '"application sales specialist" LIMS ELN Paris',
   '"CMC project manager" biologics France',
   '"technical project manager" CMC France',
   '"MSAT scientist" biologics France',
@@ -123,6 +151,17 @@ const searchTemplates = [
   '"process validation" biologics France',
   '"drug product development" mAb France',
   '"formulation scientist" biologics France'
+];
+
+const cdmoSearchTemplates = [
+  '"proposal manager" CDMO France',
+  '"business development associate" CDMO biologics Europe',
+  '"technical project manager" CDMO Drug Product France',
+  '"customer success" CDMO life sciences France',
+  '"field application specialist" bioprocess France',
+  '"technical sales specialist" CDMO life sciences France',
+  '"QA project manager" CDMO France',
+  '"client project manager" CDMO pharma France'
 ];
 
 const dailySources = [
@@ -175,7 +214,7 @@ const worldwideSearchTemplates = [
 const trackerStages = ["To apply", "Applied", "Interview", "Follow-up", "Closed"];
 
 let state = { ...starter };
-const careerVersion = 2;
+const careerVersion = 3;
 
 function $(id) {
   return document.getElementById(id);
@@ -700,12 +739,21 @@ function renderSearchStrings() {
   });
 }
 
+function renderCdmoSearchStrings() {
+  renderChips("cdmoSearchStrings", cdmoSearchTemplates);
+}
+
 function buildDailyQueries() {
   const must = splitLines($("mustHaveKeywords").value);
   const nice = splitLines($("niceKeywords").value);
   const roleLines = splitLines($("targetRoles").value);
   const baseQueries = [
     '"CMC technical project manager" biopharma',
+    '"proposal manager" CDMO biologics',
+    '"business development associate" CDMO',
+    '"technical sales specialist" life sciences',
+    '"field application specialist" bioprocess',
+    '"customer success" pharma biotech',
     '"MSAT scientist" biologics',
     '"tech transfer scientist" pharmaceutical',
     '"regulatory CMC" pharmaceutical',
@@ -737,13 +785,56 @@ function renderDailyFinder() {
 
   renderList("scoreChecklist", [
     "Role mentions biologics, mAb, injectable drug product, formulation, process development, CMC, MSAT, or tech transfer.",
-    "Experience requested is close to 2-5 years, or the role welcomes scientist-level candidates.",
+    "Role uses your scientific background as an advantage: CDMO, proposal, customer success, technical sales, field application, CMC, MSAT, tech transfer or Drug Product.",
     "Work is in France, hybrid, or realistically commutable.",
-    "Tasks include hands-on development, cross-functional CMC work, or external CMO coordination.",
-    "Avoid roles that are mostly sales, unrelated cosmetics, very senior leadership, or outside your work authorization."
+    "Salary is high enough for the level: ideally EUR 45k+ in France, or a clear bonus/growth path.",
+    "Tasks include technical/customer interface, cross-functional coordination, proposal work, project execution, or external CDMO/CRO coordination.",
+    "Avoid roles that are pure retail/call-center work without scientific, healthcare, pharma, biotech, CDMO or technical content."
   ]);
   renderChips("companyWatchlist", companyWatchlist);
   renderJobSuggestions();
+}
+
+function renderCdmoSuggestions() {
+  const container = $("cdmoSuggestions");
+  const jobs = sortJobs(window.cdmoJobSuggestions || []);
+  container.innerHTML = "";
+  $("cdmoMeta").textContent = `${jobs.length} CDMO suggestions ranked by fit, salary potential, and future growth.`;
+  if (!jobs.length) {
+    container.innerHTML = "<p>No CDMO suggestions have been added yet.</p>";
+    return;
+  }
+  jobs.forEach((job, index) => {
+    container.appendChild(createJobCard(job, index));
+  });
+}
+
+function createJobCard(job, index) {
+  const card = document.createElement("section");
+  card.className = "job-card";
+  card.innerHTML = `
+    <header>
+      <div>
+        <span class="priority">${escapeHtml(job.priority || "Recommended")}</span>
+        <span class="score">Rank ${index + 1} - Fit ${escapeHtml(String(job.fitScore || "n/a"))}/100</span>
+        <h4>${escapeHtml(job.title)}</h4>
+        <p class="meta">${escapeHtml(job.company)} - ${escapeHtml(job.location)}</p>
+      </div>
+      <div class="job-actions">
+        <button type="button" class="secondary prepare-job">Prepare application</button>
+        <button type="button" class="secondary track-job">Track job</button>
+        <a href="${job.url}" target="_blank" rel="noreferrer">Open job</a>
+      </div>
+    </header>
+    <p class="salary"><strong>Salary:</strong> ${escapeHtml(job.salaryEstimate || "No estimate available yet.")}</p>
+    <p class="fit-note"><strong>Fit note:</strong> ${escapeHtml(getFitNote(job.fitScore))}</p>
+    <p>${escapeHtml(job.fit)}</p>
+    <p class="concern"><strong>Check:</strong> ${escapeHtml(job.concern)}</p>
+    <div class="chips">${job.angles.map((angle) => `<span class="chip">${escapeHtml(angle)}</span>`).join("")}</div>
+  `;
+  card.querySelector(".prepare-job").addEventListener("click", () => prepareApplication(job));
+  card.querySelector(".track-job").addEventListener("click", () => trackRecommendedJob(job));
+  return card;
 }
 
 function renderJobSuggestions() {
@@ -922,6 +1013,23 @@ function copyWorldwideSummary() {
   );
 }
 
+function copyCdmoSummary() {
+  const jobs = window.cdmoJobSuggestions || [];
+  const text = jobs.map((job, index) => [
+    `${index + 1}. ${job.title} - ${job.company} (${job.priority || "Recommended"})`,
+    `Location: ${job.location}`,
+    `Link: ${job.url}`,
+    `Salary: ${job.salaryEstimate || "No estimate available yet."}`,
+    `Fit: ${job.fit}`,
+    `Concern: ${job.concern}`,
+    `Angles: ${job.angles.join("; ")}`
+  ].join("\n")).join("\n\n");
+  navigator.clipboard.writeText(text).then(
+    () => showToast("CDMO shortlist copied"),
+    () => showToast("Copy failed")
+  );
+}
+
 function renderWorldwideSearchStrings() {
   renderChips("worldwideSearchStrings", worldwideSearchTemplates);
 }
@@ -996,6 +1104,7 @@ function getNoteValue(lines, key) {
 
 function detectRoleType(text) {
   const value = text.toLowerCase();
+  if (value.includes("business development") || value.includes("account manager") || value.includes("technical sales") || value.includes("field application") || value.includes("customer success") || value.includes("commercial")) return "commercial";
   if (value.includes("proposal") || value.includes("writer") || value.includes("client")) return "proposal";
   if (value.includes("regulatory") || value.includes("impa") || value.includes("ctd")) return "regulatory";
   if (value.includes("msat") || value.includes("tech transfer") || value.includes("technology transfer") || value.includes("industrial")) return "msat";
@@ -1017,6 +1126,9 @@ function getCvTitles(type, isFrench) {
     proposal: isFrench
       ? ["Proposal Writer CDMO - Biologics Drug Product", "Rédaction technique | CMC | Coordination client et équipes scientifiques"]
       : ["Technical Proposal Writer - CDMO Biologics", "Technical writing | CMC | Client and scientific team coordination"],
+    commercial: isFrench
+      ? ["Technical Sales / Customer Success - Life Sciences & CDMO", "Biotech | Drug Product | Support client scientifique"]
+      : ["Technical Sales / Customer Success - Life Sciences & CDMO", "Biotech | Drug Product | Scientific customer support"],
     formulation: isFrench
       ? ["Chargée de Développement Pharmaceutique - Produits injectables", "Formulation & procédés | QbD / DoE | Biologiques"]
       : ["Pharmaceutical Development Scientist - Injectable Products", "Formulation & process | QbD / DoE | Biologics"]
@@ -1052,6 +1164,11 @@ function getTargetedSummary(type, isFrench, job) {
       "Expérience dans la structuration d'informations scientifiques complexes pour protocoles, rapports, templates et contenus techniques.",
       "Capacité à faire le lien entre besoins clients, faisabilité technique, ressources et équipes formulation, analytique, production et qualité."
     ],
+    commercial: [
+      "Profil scientifique CDMO/Biologics pouvant évoluer vers des fonctions commerciales ou support client à forte composante technique.",
+      "Capacité à comprendre les besoins des clients biotech/pharma et à traduire les contraintes formulation, analytique, GMP et CMC en valeur business.",
+      "Positionnement pertinent pour technical sales, customer success, field application ou business development lorsque le rôle demande une vraie crédibilité scientifique."
+    ],
     formulation: [
       "Scientifique en développement pharmaceutique spécialisée dans les produits injectables stériles et biologiques.",
       "Expérience en formulation liquide et lyophilisée, procédés, stabilité, QbD/DoE, documentation et troubleshooting.",
@@ -1079,6 +1196,11 @@ function getTargetedSummary(type, isFrench, job) {
       "Experience structuring complex scientific information for protocols, reports, templates and technical content.",
       "Able to connect client needs, technical feasibility, resources and formulation, analytical, production and quality teams."
     ],
+    commercial: [
+      "Scientific CDMO/Biologics profile ready to move toward commercial or customer-support roles with strong technical content.",
+      "Able to understand biotech/pharma customer needs and translate formulation, analytical, GMP and CMC constraints into business value.",
+      "Relevant for technical sales, customer success, field application or business development roles where scientific credibility matters."
+    ],
     formulation: [
       "Pharmaceutical development scientist specialized in sterile injectable and biologics drug products.",
       "Experience in liquid and lyophilized formulation, process development, stability, QbD/DoE, documentation and troubleshooting.",
@@ -1102,6 +1224,9 @@ function getFitHighlights(type, isFrench, job) {
     proposal: isFrench
       ? ["Rédaction et structuration d'informations techniques complexes", "Interaction clients et équipes internes en français/anglais", "Compréhension CDMO des besoins, ressources et faisabilité"]
       : ["Writing and structuring complex technical information", "Client and internal team interactions in French/English", "CDMO understanding of needs, resources and feasibility"],
+    commercial: isFrench
+      ? ["Crédibilité scientifique auprès de clients biotech/pharma", "Compréhension CDMO : formulation, analytique, GMP, faisabilité", "Communication français/anglais et traduction besoin client -> solution technique"]
+      : ["Scientific credibility with biotech/pharma customers", "CDMO understanding: formulation, analytical, GMP, feasibility", "French/English communication and translating customer needs into technical solutions"],
     formulation: isFrench
       ? ["6 molécules First-in-Human accompagnées jusqu'à la production GMP", "Formulation liquide et lyophilisée de produits injectables", "QbD/DoE, stabilité, compatibilité et troubleshooting"]
       : ["6 First-in-Human molecules supported up to GMP production", "Liquid and lyophilized formulation of injectable products", "QbD/DoE, stability, compatibility and troubleshooting"]
@@ -1136,6 +1261,9 @@ function getTargetedSkills(type, isFrench) {
     proposal: isFrench
       ? ["Rédaction technique : protocoles, rapports, templates, contenus proposals", "Structuration des besoins techniques, ressources et faisabilité", "Communication client en français et anglais"]
       : ["Technical writing: protocols, reports, templates, proposal content", "Structuring technical needs, resources and feasibility", "Client communication in French and English"],
+    commercial: isFrench
+      ? ["Technical sales, customer success, field application, account management", "Communication client, discovery scientifique, traduction besoin -> solution", "CDMO/biotech services : formulation, analytique, GMP, Drug Product"]
+      : ["Technical sales, customer success, field application, account management", "Customer communication, scientific discovery, translating needs into solutions", "CDMO/biotech services: formulation, analytical, GMP, Drug Product"],
     formulation: isFrench
       ? ["Formulation liquide et lyophilisée, stabilité, compatibilité", "Procédés : mixing, filtration, remplissage aseptique, lyophilisation", "Troubleshooting formulation/procédés et support développement"]
       : ["Liquid and lyophilized formulation, stability, compatibility", "Processes: mixing, filtration, aseptic filling, lyophilization", "Formulation/process troubleshooting and development support"]
@@ -1217,7 +1345,7 @@ function getTargetedExperience(type, isFrench) {
     }
   };
   const data = isFrench ? fr : en;
-  const order = type === "cmc" || type === "regulatory" || type === "proposal"
+  const order = type === "cmc" || type === "regulatory" || type === "proposal" || type === "commercial"
     ? ["aurobac", "catalent", "sanofi"]
     : ["catalent", "aurobac", "sanofi"];
   return order.map((key) => ({ ...data[key], bullets: prioritizeBullets(data[key].bullets, type) }));
@@ -1229,6 +1357,7 @@ function prioritizeBullets(bullets, type) {
     msat: ["industrialisation", "industrialization", "scale-up", "transfert", "transfer", "production", "troubleshooting", "procédés", "process"],
     regulatory: ["imp", "réglementaire", "regulatory", "ctd", "documentation", "sop", "qualité", "quality", "change"],
     proposal: ["clients", "rédaction", "writing", "templates", "contenus", "content", "faisabilité", "feasibility"],
+    commercial: ["clients", "customer", "communication", "faisabilité", "feasibility", "cdmo", "cro", "technical", "anglais", "english"],
     formulation: ["formulation", "injectables", "lyophilisées", "lyophilized", "stabilité", "stability", "doe", "qbd"]
   }[type] || [];
   return [...bullets].sort((a, b) => scoreText(b, terms) - scoreText(a, terms)).slice(0, type === "formulation" ? 5 : 4);
@@ -1406,6 +1535,7 @@ $("cvPhotoUpload").addEventListener("change", handleCvPhotoUpload);
 $("removeCvPhoto").addEventListener("click", removeCvPhoto);
 $("addTracker").addEventListener("click", addTrackerItem);
 $("copyJobSummary").addEventListener("click", copyJobSummary);
+$("copyCdmoSummary").addEventListener("click", copyCdmoSummary);
 $("copyWorldwideSummary").addEventListener("click", copyWorldwideSummary);
 $("cvUpload").addEventListener("change", handleCvUpload);
 $("relevantExperience").addEventListener("input", () => {
@@ -1431,7 +1561,9 @@ loadState();
 renderTracker();
 renderTrackerBoard();
 renderSearchStrings();
+renderCdmoSearchStrings();
 renderDailyFinder();
+renderCdmoSuggestions();
 renderWorldwideSuggestions();
 renderWorldwideSearchStrings();
 generateFormattedCv();

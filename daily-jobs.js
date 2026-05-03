@@ -1,130 +1,130 @@
 window.dailyJobSuggestions = [
   {
-    fitScore: 88,
-    priority: "Apply soon",
-    title: "Technical Project Manager - CMC",
-    company: "Sia",
-    location: "Paris, Ile-de-France, France - remote listed",
-    salaryEstimate: "Estimated France range: EUR 45,000-65,000/year. Consulting CMC PM roles can be higher with stronger PM experience.",
-    url: "https://fr.talent.com/view?id=616849808468220883",
-    fit: "High-future role: it combines CMC development, technical transfer, formulation, analytical, quality, supply chain, and external partner coordination. Your 4 months of CMC project management plus 3.5 years of drug product development can be positioned as a bridge profile.",
-    concern: "You may need to show project coordination evidence very clearly because the title is project-management focused.",
-    angles: [
-      "CMC coordination with formulation/process/analytical teams",
-      "Injectable mAb drug product development knowledge",
-      "Operational follow-up: timelines, actions, risks, external partners"
-    ]
-  },
-  {
-    fitScore: 78,
-    priority: "Ambitious",
-    title: "CMC Project Manager",
-    company: "ALIOS Conseil",
-    location: "Boulogne-Billancourt / Paris area, France",
-    salaryEstimate: "Estimated France range: EUR 45,000-70,000/year. Could be higher if the role is confirmed senior CMC PM.",
-    url: "https://fr.indeed.com/Paris-%2875%29-Emplois-Cmc",
-    fit: "Potential salary and career-growth step: CMC project manager roles can move you toward strategic development, CDMO/CRO coordination, regulatory dossiers, and leadership.",
-    concern: "This may require more confirmed CMC project management experience, so treat it as an ambitious application and emphasize technical credibility.",
-    angles: [
-      "Technical CMC understanding from injectable drug product development",
-      "Experience coordinating CMC actions and stakeholders",
-      "Ability to work with CDMO/CRO, quality, analytical, and regulatory interfaces"
-    ]
-  },
-  {
-    fitScore: 72,
-    priority: "Ambitious",
+    fitScore: 94,
+    priority: "Strong fit",
     title: "Senior Scientist, DSP Process Engineer - Tech Transfer and Production Support",
     company: "Sanofi",
-    location: "Vitry-sur-Seine, France - hybrid",
-    salaryEstimate: "Source-listed range: EUR 48,000-64,000/year.",
+    location: "Vitry-sur-Seine, Île-de-France, France (Hybrid: 40% remote; travel ~10%)",
+    salaryEstimate: "Source-listed: EUR 48,000-64,000/year.",
     url: "https://jobs.sanofi.cn/%E5%B7%A5%E4%BD%9C/%E5%A1%9E%E7%BA%B3%E6%B2%B3%E7%95%94%E7%BB%B4%E6%8F%90/senior-scientist-dsp-process-engineer-tech-transfer-and-production-support/3036/35036670592",
-    fit: "Strong future path: tech transfer and production support in biologics can lead to MSAT, industrialization, manufacturing science, and higher-paying technical leadership roles. The posting shows a salary range of EUR 48,000-64,000.",
-    concern: "DSP is drug substance/downstream process, while your strongest experience is drug product; apply only if you can connect to process development, data, tech transfer, and biologics manufacturing.",
+    fit: "Strong match for a Catalent-style CDMO-facing profile: tech transfer leadership, GMP production support, data-driven troubleshooting, and process documentation across biologics manufacturing. Your injectable mAb DP experience is a credible bridge; position it as “biologics tech transfer + CMC execution” and highlight cross-functional coordination and CDMO interface.",
+    concern: "Role is downstream/process-engineering heavy (DS purification) rather than DP formulation; be ready to show fast ramp-up on DSP concepts and examples of scaling/transfer/validation-style thinking.",
     angles: [
-      "Biologics process development mindset",
-      "Technical transfer and GMP manufacturing interest",
-      "Cross-functional CMC and production-support communication"
+      "Translate DP process dev rigor into tech-transfer execution + GMP support",
+      "Tell a CDMO interface story: plans, readiness, risks, deliverables, escalation",
+      "Show documentation strength: protocols/reports + investigation writeups"
+    ]
+  },
+  {
+    fitScore: 93,
+    priority: "Strong fit",
+    title: "Scientist, Drug Product Development (all genders)",
+    company: "Evotec (Just-Evotec Biologics / Sandoz Biologics France SAS)",
+    location: "Toulouse, France",
+    salaryEstimate: "Estimated range: EUR 42,000-55,000/year (market estimate; not source-listed).",
+    url: "https://careers.evotec.com/en/job/toulouse/scientist-drug-product-development-all-genders/1296/32050793728",
+    fit: "Direct match to your injectable mAb drug product formulation + process development background (biologics formulation, DP process experiments, stability, CMC interfaces, sterile injectable dosage forms).",
+    concern: "May expect wide analytical familiarity and rapid iteration; prepare concrete examples of partnership with analytical/QC/QA/manufacturing and how you drove decisions under timelines.",
+    angles: [
+      "Injectable mAb DP formulation + stability strategy",
+      "Sterile DP process development + tech package readiness",
+      "Cross-functional execution with QA/QC/manufacturing + external CDMOs"
+    ]
+  },
+  {
+    fitScore: 88,
+    priority: "Apply soon",
+    title: "Program Manager F/H",
+    company: "SERB Pharmaceuticals",
+    location: "Paris 8e, Île-de-France, France (office-based; role spans cross-functional stakeholders)",
+    salaryEstimate: "Estimated range: EUR 65,000-90,000/year (senior program management in pharma; not source-listed).",
+    url: "https://careers.serb.com/job/Program-Manager-FH/1344101300/",
+    fit: "High-upside pivot into CMC/program leadership with a strong pharma execution footprint: portfolio/project governance across Regulatory, CMC, Industrial Affairs, Quality, Supply, and external partners (CMO/CRO). Your Catalent CDMO experience and early PM exposure are an advantage for stakeholder orchestration and vendor-facing delivery.",
+    concern: "Posting targets a senior PM background (often 7+ years). If you apply, position your 3.5 years as “end-to-end CMC delivery owner” (timelines, risks, tech transfer deliverables) + emphasize Catalent client-facing rigor.",
+    angles: [
+      "CMC + external partner coordination (CMO/CRO) in regulated cGxP context",
+      "Program governance: plans, milestones, budgets, risks, escalation",
+      "Bridge scientific detail to exec-level reporting and decision support"
+    ]
+  },
+  {
+    fitScore: 84,
+    priority: "Good bridge",
+    title: "Spécialiste Assurance Qualité Clinique/MSAT",
+    company: "Sanofi",
+    location: "Le Trait, Normandie, France",
+    salaryEstimate: "Estimated range: EUR 48,000-65,000/year (QA specialist in pharma manufacturing; not source-listed).",
+    url: "https://jobs.sanofi.com/fr/emploi/le-trait/specialiste-assurance-qualite-clinique-msat/2649/35605939520",
+    fit: "Strong bridge into MSAT/industrialization via quality-in-projects: direct exposure to GMP clinical manufacturing, project interfaces with MSAT, and daily collaboration with production/quality systems. Your injectable DP development background helps you translate technical intent into right-first-time GMP execution.",
+    concern: "More QA-focused than pure MSAT/tech transfer; tailor your narrative around risk management, deviations/CAPA, data integrity, and cross-functional project delivery.",
+    angles: [
+      "QA + MSAT interface: ensure GMP compliance during clinical production",
+      "Deviation/investigation mindset with clear scientific rationale",
+      "Use DP development experience to prevent issues upstream (QbD thinking)"
+    ]
+  },
+  {
+    fitScore: 81,
+    priority: "Apply soon",
+    title: "Chef de projet Assurance Qualité Produits (H/F)",
+    company: "Biogaran (Servier)",
+    location: "Colombes, Île-de-France, France",
+    salaryEstimate: "Estimated range: EUR 50,000-70,000/year (QA project lead with supplier audits + product oversight; not source-listed).",
+    url: "https://jobs.servier.com/biogaran/job/Colombes-Chef-de-projet-Assurance-Qualit%C3%A9-Produits-%28HF%29/1349926855/",
+    fit: "Good fit if you want a fast, credible bridge from DP development into product/CMO oversight: audits of subcontractors, deviations/OOS management, product quality reviews, stability oversight, and involvement in launches/transfers. Your CDMO experience helps you navigate supplier interfaces and technical-quality tradeoffs.",
+    concern: "Less hands-on formulation/process development; success depends on strong GMP quality systems and confident supplier-facing communication.",
+    angles: [
+      "Leverage CDMO experience for supplier audits + quality governance",
+      "Use CMC literacy to write/defend investigations and quality decisions",
+      "Position as stepping stone to MSAT/tech transfer/CMC PM roles"
+    ]
+  },
+  {
+    fitScore: 79,
+    priority: "Good bridge",
+    title: "Consultant - Peptide DS Manufacturing & Formulation Development",
+    company: "Proclinical (client in Paris region)",
+    location: "Paris area, France (contract/consulting)",
+    salaryEstimate: "Source-listed: €1,000-€1,100/day (contract).",
+    url: "https://www.proclinical.com/job/consultant-peptide-ds-manufacturing-and-formulation-development-in-paris-france-jid-23753",
+    fit: "High-compensation consulting role combining CMC leadership, CDMO selection, tech transfer, scale-up, formulation, and documentation. Even if peptides are new, your sterile injectable DP + CDMO execution background maps well to vendor-facing CMC delivery and disciplined technical documentation.",
+    concern: "Domain risk: peptides (DS + formulation) may require expertise beyond mAbs; treat as ‘bridge’ only if you can demonstrate relevant examples (CDMO governance, tech transfer playbooks, comparability/CMC docs).",
+    angles: [
+      "Sell your CDMO delivery toolkit: selection, governance, tech transfer plans",
+      "Emphasize sterile injectable CMC risk management + documentation strength",
+      "Frame as rapid upskilling + high-impact interim leadership"
     ]
   },
   {
     fitScore: 76,
     priority: "Good bridge",
-    title: "MSAT Analytical Laboratory Scientist",
-    company: "Sanofi",
-    location: "Vitry-sur-Seine, France",
-    salaryEstimate: "Estimated France range: EUR 42,000-58,000/year for scientist/MSAT laboratory roles; senior scope may be higher.",
-    url: "https://mygwork.com/jobs/sanofi-msat-analytical-laboratory-scientist",
-    fit: "Good growth path: MSAT sits between development and commercial production, which can offer stronger long-term career options than narrow bench-only roles.",
-    concern: "This is analytical/MSAT focused; you need to show analytical technique interface and how your formulation/process work used data to make development decisions.",
+    title: "Chargé de portefeuille clients (H/F)",
+    company: "Cenexi (CDMO injectables)",
+    location: "Fontenay-sous-Bois (Paris area), France",
+    salaryEstimate: "Estimated range: EUR 45,000-60,000/year (cadre client portfolio / supply chain interface; not source-listed).",
+    url: "https://www.cenexi.com/app/uploads/2025/11/JD_FY_SUPPLY_Charge-de-portefeuille-client.pdf",
+    fit: "Customer-facing CDMO role with strong stakeholder coordination (orders-to-cash, planning/quality interface, proactive client communication). Not a pure technical role, but your CDMO + injectable context is a differentiator and it can be a stepping stone toward Key Account / customer interface / project coordination tracks.",
+    concern: "More supply-chain/contract operations than CMC; make sure you’re comfortable being measured on OTIF/KPIs and SAP-driven execution rather than lab/process work.",
     angles: [
-      "mAb formulation/process development with analytical collaboration",
-      "Stability, characterization, and quality-focused thinking",
-      "Interest in lifecycle management and manufacturing support"
+      "Position Catalent experience as ‘client success’ + delivery rigor in CDMO",
+      "Use scientific background to de-risk client communication and change control",
+      "Target progression toward KAM/Proposal/Technical PM roles"
     ]
   },
   {
-    fitScore: 92,
-    priority: "Strong fit",
-    title: "Scientist, Drug Product Development",
-    company: "Sandoz Biologics France SAS / Evotec",
-    location: "Toulouse, France",
-    salaryEstimate: "Estimated France range: EUR 38,000-52,000/year for scientist-level biologics drug product development.",
-    url: "https://careers.evotec.com/en/job/toulouse/scientist-drug-product-development-all-genders/1296/32050793728",
-    fit: "Very strong direct fit: biologics drug product, formulation, process development, stability studies, injectable dosage forms, and cross-functional teams.",
-    concern: "This is closer to your past role than a jump in salary/future path, but it is a strong platform if the company offers growth toward CMC, MSAT, or tech transfer.",
-    angles: [
-      "3.5 years injectable mAb formulation and process development",
-      "Protein formulation, stability, DP process development, analytical interface",
-      "CMC coordination experience for cross-functional communication"
-    ]
-  },
-  {
-    fitScore: 84,
+    fitScore: 73,
     priority: "Level-up",
-    title: "Scientist II, Drug Product Development",
-    company: "Sandoz Biologics France SAS / Evotec",
-    location: "Toulouse, France",
-    salaryEstimate: "Estimated France range: EUR 45,000-60,000/year if positioned as Scientist II or experienced scientist.",
-    url: "https://careers.evotec.com/en/job/toulouse/scientist-drug-product-development-all-genders/1296/32050793984",
-    fit: "Good technical fit and a possible level-up if your hands-on experience is strong in biologics/protein formulation and drug product process development.",
-    concern: "May expect closer to 5 years or PhD-level experience. Still worth considering if your mAb project evidence is strong.",
+    title: "Responsable Scientifique MSAT",
+    company: "Sanofi",
+    location: "Marcy-l'Étoile (Lyon area), France",
+    salaryEstimate: "Estimated range: EUR 55,000-80,000/year (MSAT scientist/lead band; not source-listed).",
+    url: "https://jobs.sanofi.com/fr/emploi/marcy-l-etoile/responsable-scientifique-msat/2649/36989233536",
+    fit: "Good pivot into MSAT (industrialization + lifecycle support). Your injectable DP development experience maps to CMC mindset, process robustness, documentation, and cross-functional execution; position yourself as a ‘bridge’ between development intent and manufacturing reality.",
+    concern: "Scope may skew toward vaccine/bioprocess topics not strictly DP; read the technical scope and tailor your examples to tech transfer, validation thinking, and shopfloor support.",
     angles: [
-      "Injectable mAb development experience",
-      "Hands-on formulation/process studies and stability mindset",
-      "Collaboration with analytical, QC, QA, manufacturing, and CMC teams"
-    ]
-  },
-  {
-    fitScore: 80,
-    priority: "Good bridge",
-    title: "Formulation & Process Senior Scientist",
-    company: "Ipsen PharmSciences SAS",
-    location: "Dreux, France - hybrid versions exist",
-    salaryEstimate: "Estimated France range: EUR 42,000-58,000/year for CDD/senior scientist bridge; higher if principal/senior permanent.",
-    url: "https://www.talentify.io/job/formulation-and-process-senior-scientist-dreux-centre-val-de-loire-fr-ipsen-r-19027",
-    fit: "Good scientific fit with better scope if the short-term contract version is active: formulation/process development, finished products, injectable forms, studies, quality, and technical coordination.",
-    concern: "Some postings ask for senior experience. Check the exact version before investing time.",
-    angles: [
-      "Formulation/process development of injectable mAb medicines",
-      "Quality, GMP, and CMC mindset",
-      "Ability to support studies and cross-functional follow-up"
-    ]
-  },
-  {
-    fitScore: 58,
-    priority: "Future target",
-    title: "Regulatory CMC Manager",
-    company: "Stirling Q&R client",
-    location: "France - remote listed",
-    salaryEstimate: "Source-listed range: EUR 65,000-80,000/year.",
-    url: "https://www.stirlingqr.com/job/regulatory-cmc-manager/",
-    fit: "A high-salary future direction: regulatory CMC can pay well and uses your technical drug product knowledge. The posting lists EUR 65,000-80,000.",
-    concern: "This one asks for around 5 years regulatory CMC, so it is more of a future target than an immediate best fit. Search for associate regulatory CMC roles first.",
-    angles: [
-      "Injectable product CMC technical understanding",
-      "Experience translating development work into documentation",
-      "Long-term interest in regulatory strategy and submissions"
+      "Show readiness for MSAT: troubleshooting, change control, process robustness",
+      "Use CDMO background to handle supplier/partner interfaces cleanly",
+      "Emphasize disciplined documentation and stakeholder coordination"
     ]
   }
 ];

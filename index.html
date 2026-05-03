@@ -57,6 +57,7 @@
       <section class="workspace">
         <nav class="tabs" aria-label="Workspace sections">
           <button class="tab active" data-tab="daily">Jobs today</button>
+          <button class="tab" data-tab="cdmo">CDMO jobs</button>
           <button class="tab" data-tab="worldwide">Worldwide fit</button>
           <button class="tab" data-tab="profile">Profile</button>
           <button class="tab" data-tab="jd">Job fit</button>
@@ -162,6 +163,50 @@
             <article>
               <h3>Companies to watch</h3>
               <div id="companyWatchlist" class="chips"></div>
+            </article>
+          </div>
+        </section>
+
+        <section id="cdmo" class="panel">
+          <div class="panel-heading">
+            <div>
+              <p class="eyebrow">CDMO opportunities</p>
+              <h2>Technical, commercial, proposal, and customer-facing CDMO roles.</h2>
+            </div>
+            <button id="copyCdmoSummary" class="secondary">Copy CDMO shortlist</button>
+          </div>
+          <article class="suggestion-panel">
+            <div class="suggestion-heading">
+              <div>
+                <h3>CDMO-focused jobs</h3>
+                <p id="cdmoMeta">Roles where your CDMO and Drug Product background is a business advantage.</p>
+              </div>
+            </div>
+            <div id="cdmoSuggestions" class="job-suggestions"></div>
+          </article>
+          <div class="results-grid daily-results">
+            <article>
+              <h3>Best CDMO paths</h3>
+              <ul>
+                <li>Proposal writer or proposal manager for CDMO services.</li>
+                <li>Technical project manager or client project manager.</li>
+                <li>Business development associate or account manager.</li>
+                <li>Field application or technical sales specialist.</li>
+                <li>QA project manager or regulatory CMC interface.</li>
+              </ul>
+            </article>
+            <article>
+              <h3>Salary screen</h3>
+              <ul>
+                <li>Prioritize roles above EUR 45k in France.</li>
+                <li>For commercial roles, check variable bonus and travel load.</li>
+                <li>For CDMO BD, salary can rise faster with client ownership.</li>
+                <li>Proposal/customer success roles can be good bridges into BD.</li>
+              </ul>
+            </article>
+            <article>
+              <h3>Search strings</h3>
+              <div id="cdmoSearchStrings" class="chips"></div>
             </article>
           </div>
         </section>
@@ -328,11 +373,11 @@
             <article>
               <h3>Best-fit role families</h3>
               <ul>
-                <li>Formulation Scientist, Biologics / Injectable Drug Product</li>
-                <li>Process Development Scientist, mAb / Sterile Manufacturing</li>
-                <li>Drug Product Development Scientist</li>
-                <li>CMC Associate Project Manager or CMC Coordinator</li>
-                <li>MSAT / Tech Transfer Scientist for biologics fill-finish</li>
+                <li>CDMO proposal writer, proposal manager, or technical writer</li>
+                <li>Technical sales, field application, customer success, or account manager</li>
+                <li>Business development associate for CDMO, CRO, biotech, or life sciences tools</li>
+                <li>CMC project manager, CMC coordinator, pharma PMO, or client project manager</li>
+                <li>MSAT, tech transfer, validation, Drug Product, or formulation development</li>
               </ul>
             </article>
             <article>
@@ -355,6 +400,7 @@
 
     <div id="toast" class="toast" role="status" aria-live="polite"></div>
     <script src="daily-jobs.js"></script>
+    <script src="cdmo-jobs.js"></script>
     <script src="worldwide-jobs.js"></script>
     <script src="app.js"></script>
   </body>
